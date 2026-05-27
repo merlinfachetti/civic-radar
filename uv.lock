@@ -349,7 +349,7 @@ requires-dist = [
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.8.0" },
     { name = "scalar-fastapi", specifier = ">=1.0.3" },
     { name = "slowapi", specifier = ">=0.1.9" },
-    { name = "sqlalchemy", extras = ["asyncio"], specifier = ">=2.0.36" },
+    { name = "sqlalchemy", extras = ["asyncio"], specifier = ">=2.0.50" },
     { name = "structlog", specifier = ">=24.4.0" },
     { name = "typer", specifier = ">=0.15.0" },
     { name = "types-python-dateutil", marker = "extra == 'dev'", specifier = ">=2.9.0" },
