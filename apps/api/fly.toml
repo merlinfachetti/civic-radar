@@ -1,0 +1,57 @@
+# CivicRadar API — Fly.io deployment manifest.
+#
+# Layout choices:
+#   - primary_region = gru (São Paulo) for low latency to Brazilian users.
+#   - Single 1 GB volume mounted at /data so SQLite survives restarts.
+#   - auto_stop / auto_start so the VM hibernates when idle (free-tier friendly).
+#   - Internal port 8000 matches Uvicorn in docker-entrypoint.sh.
+#   - Build context is the repo root (set by --dockerfile + --no-cache flags
+#     during `fly deploy`); the Dockerfile already expects to run from there.
+
+app = "civic-radar-api"
+primary_region = "gru"
+
+[build]
+  # Paths are relative to the build context (workspace root). Always run
+  # `fly deploy -c apps/api/fly.toml` from the repository root.
+  dockerfile = "apps/api/Dockerfile"
+  ignorefile = ".dockerignore"
+
+[env]
+  CIVIC_RADAR_ENV = "production"
+  CIVIC_RADAR_DATABASE_URL = "sqlite+aiosqlite:////data/civic_radar.db"
+  CIVIC_RADAR_LOG_LEVEL = "INFO"
+  CIVIC_RADAR_LOG_FORMAT = "json"
+  CIVIC_RADAR_RAW_SNAPSHOT_PATH = "/data/raw_snapshots"
+  CIVIC_RADAR_SEED_ON_STARTUP = "true"
+  # CIVIC_RADAR_CORS_ORIGINS comes from `fly secrets set` so we never check the
+  # production frontend URL into source control.
+
+[[mounts]]
+  source = "civic_radar_data"
+  destination = "/data"
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+  [[http_service.checks]]
+    interval = "30s"
+    timeout = "5s"
+    grace_period = "10s"
+    method = "GET"
+    path = "/health"
+
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory_mb = 512
+
+# Note: no `release_command` here. Our entrypoint already runs
+# `alembic upgrade head` on every machine start, and SQLite lives on a
+# per-machine mounted volume — a release container would migrate its own
+# ephemeral volume and never touch the production data.

@@ -13,7 +13,7 @@ _Find, filter and track Brazilian public tenders that match your profile._
 [![Good first issues](https://img.shields.io/github/issues/merlinfachetti/civic-radar/good%20first%20issue?style=flat-square&label=good%20first%20issue&color=7057ff)](https://github.com/merlinfachetti/civic-radar/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
 [![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat-square)](./docs/CONTRIBUTING.md)
 
-[**Quick Start**](#-quick-start) · [**Why?**](#-why-civicradar) · [**Architecture**](#-architecture) · [**Roadmap**](#-roadmap) · [**Contribute**](#-contributing) · [**Docs**](./docs/)
+[**Live**](https://civic-radar.aldenmerlin.com) · [**API**](https://civic-radar-production.up.railway.app/docs) · [**Quick Start**](#-quick-start) · [**Why?**](#-why-civicradar) · [**Architecture**](#-architecture) · [**Roadmap**](#-roadmap) · [**Contribute**](#-contributing) · [**Docs**](./docs/)
 
 </div>
 
@@ -63,13 +63,15 @@ docker compose up -d
 
 That is it. Open:
 
-| Service | URL | Description |
+| Service | Local | Production |
 |---|---|---|
-| 🌐 **Web** | http://localhost:3000 | Main interface |
-| 📡 **API** | http://localhost:8000 | FastAPI |
-| 📖 **Docs (Scalar)** | http://localhost:8000/docs | Navigable OpenAPI |
-| 📚 **ReDoc** | http://localhost:8000/redoc | Alternative documentation |
-| 💚 **Health** | http://localhost:8000/health | Service status |
+| 🌐 **Web** | http://localhost:3000 | <https://civic-radar.aldenmerlin.com> |
+| 📡 **API** | http://localhost:8000 | <https://civic-radar-production.up.railway.app> |
+| 📖 **Scalar UI (OpenAPI)** | http://localhost:8000/docs | <https://civic-radar-production.up.railway.app/docs> |
+| 📚 **ReDoc** | http://localhost:8000/redoc | <https://civic-radar-production.up.railway.app/redoc> |
+| 💚 **Health** | http://localhost:8000/health | <https://civic-radar-production.up.railway.app/health> |
+
+> **Hosting**: the web frontend ships to Vercel (region `gru1`, São Paulo), the FastAPI is on Railway (Dockerfile build, 1 GB volume mounted at `/data` for SQLite). See `docs/TECH_FOUNDATION.md` for full deploy notes.
 
 ### Native development
 

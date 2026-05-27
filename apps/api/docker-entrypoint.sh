@@ -12,8 +12,11 @@ if [[ "${CIVIC_RADAR_SEED_ON_STARTUP:-false}" == "true" ]] && [[ -f /seeds/oppor
     uv run --no-dev civic_radar seed --file /seeds/opportunities_seed.json || true
 fi
 
-echo "→ Starting Uvicorn on 0.0.0.0:8000"
+# Respect $PORT when the host (Railway, Heroku, Cloud Run, etc.) injects one;
+# fall back to 8000 for local docker-compose / dev.
+PORT="${PORT:-8000}"
+echo "→ Starting Uvicorn on 0.0.0.0:${PORT}"
 exec uv run --no-dev uvicorn civic_radar.main:app \
     --host 0.0.0.0 \
-    --port 8000 \
+    --port "${PORT}" \
     --no-access-log

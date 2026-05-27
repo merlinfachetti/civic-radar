@@ -158,16 +158,36 @@ async def _seed_opportunities(
     if reset:
         await session.execute(delete(Opportunity))
 
+    # Pre-fetch existing (source_pk, source_url) pairs so we can skip rows that
+    # are already in the database. The DB has a unique index on this pair, so
+    # this guard turns a noisy IntegrityError into a clean idempotent no-op —
+    # which is what the entrypoint relies on for CIVIC_RADAR_SEED_ON_STARTUP.
+    existing_keys: set[tuple[str, str]] = {
+        (pk, url)
+        for pk, url in (
+            await session.execute(select(Opportunity.source_pk, Opportunity.source_url))
+        ).all()
+    }
+
     raws: list[dict[str, Any]] = json.loads(seed_path.read_text(encoding="utf-8"))
     added = 0
+    skipped = 0
     for raw in raws:
         try:
             data = _coerce_opportunity(raw, source_map)
         except (KeyError, ValueError) as exc:
             console.print(f"[red]Skip invalid seed row: {exc}[/]")
             continue
+        key = (data["source_pk"], data["source_url"])
+        if key in existing_keys:
+            skipped += 1
+            continue
         session.add(Opportunity(**data))
+        existing_keys.add(key)
         added += 1
 
     await session.flush()
-    console.print(f"[green]Seeded[/] {added} opportunities from {seed_path}")
+    console.print(
+        f"[green]Seeded[/] {added} opportunities from {seed_path}"
+        + (f" ([yellow]{skipped} already present[/])" if skipped else "")
+    )

@@ -374,19 +374,36 @@ Baseline metrics:
 
 ---
 
-## 9. Deploy (future)
+## 9. Deploy
 
-> The MVP is local-first. The options below are planned but not implemented yet.
+The MVP is also live in production. Hosting choices below.
 
-| Component | Recommended options |
-|---|---|
-| **API** | [Fly.io](https://fly.io/), [Railway](https://railway.app/), [Render](https://render.com/) |
-| **DB** | [Neon](https://neon.tech/) (serverless Postgres), Fly Postgres |
-| **Web** | [Vercel](https://vercel.com/) (native Next.js), Cloudflare Pages |
-| **Crawler jobs** | GitHub Actions schedule (free), Fly.io machines |
-| **Object storage (snapshots)** | Cloudflare R2, Backblaze B2 |
+| Component | Provider | URL / notes |
+|---|---|---|
+| **Web** (Next.js 15) | [Vercel](https://vercel.com/) | <https://civic-radar.aldenmerlin.com> · region `gru1` (São Paulo) · `apps/web/vercel.json` configures security headers + GitHub silent mode · Vercel auto-detects Next.js because `rootDirectory=apps/web` is set on the project |
+| **API** (FastAPI) | [Railway](https://railway.app/) | <https://civic-radar-production.up.railway.app> · `Dockerfile` build (`apps/api/Dockerfile`) · `numReplicas: 1` · healthcheck on `/health` |
+| **DB** (MVP) | SQLite on a Railway volume | 1 GB persistent volume mounted at `/data`; the file is `/data/civic_radar.db`. WAL mode handles the modest concurrency our endpoints need |
+| **Crawler jobs** | _not yet scheduled_ | will run as a GitHub Actions cron (free) or a second Railway service when M1.scheduler ships |
+| **Snapshots** | Railway volume | `/data/raw_snapshots` (kept on the same volume as the DB for the MVP) |
+| **DB** (future, when traffic justifies) | [Supabase](https://supabase.com/) or [Neon](https://neon.tech/) Postgres | Drop-in: switch `CIVIC_RADAR_DATABASE_URL` to a `postgresql+asyncpg://…` connection string and rerun migrations |
+| **Analytics** | [Vercel Analytics](https://vercel.com/docs/analytics) + [Speed Insights](https://vercel.com/docs/speed-insights) | Cookie-free Web Vitals capture wired in `apps/web/src/app/layout.tsx` |
 
-All of them have a free tier large enough for the open source phase.
+### Vercel project settings (mirrored via the Projects API)
+
+- `framework = "nextjs"`
+- `rootDirectory = "apps/web"`
+- `nodeVersion = "22.x"`
+- `ssoProtection = null`
+- env vars: `NEXT_PUBLIC_API_URL`, `INTERNAL_API_URL`, `NEXT_PUBLIC_SITE_URL`
+
+### Railway service settings
+
+- Builder: `Dockerfile`, path `apps/api/Dockerfile`
+- Volume: `/data`, 1 GB
+- Service-level env vars: 10× `CIVIC_RADAR_*` (see `.env.example`), plus `PORT=8000`
+- `CIVIC_RADAR_CORS_ORIGINS` must include every public web origin (today: `https://civic-radar.aldenmerlin.com`)
+
+All providers used here have a free tier large enough for the open source phase. Local dev is unchanged — `docker compose up -d` covers both services with the same code.
 
 ---
 
