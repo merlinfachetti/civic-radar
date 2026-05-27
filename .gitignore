@@ -116,3 +116,4 @@ data/raw_snapshots/
 .cache/
 tmp/
 temp/
+.vercel

@@ -1,15 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": "nextjs",
-  "installCommand": "cd apps/web && pnpm install --frozen-lockfile",
-  "buildCommand": "cd apps/web && pnpm build",
-  "outputDirectory": "apps/web/.next",
-  "ignoreCommand": "bash -c 'git diff --quiet HEAD^ HEAD -- apps/web/ vercel.json'",
   "github": {
-    "enabled": true,
     "silent": true
   },
-  "regions": ["gru1"],
   "headers": [
     {
       "source": "/(.*)",
