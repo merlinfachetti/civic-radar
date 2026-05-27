@@ -1,0 +1,66 @@
+# ───────────────────────────────────────────────────────────
+# CivicRadar — .dockerignore
+# Keeps the build context small and fast.
+# ───────────────────────────────────────────────────────────
+
+# Python build / cache artifacts
+**/__pycache__
+**/*.py[cod]
+**/.mypy_cache
+**/.ruff_cache
+**/.pytest_cache
+**/htmlcov
+**/.coverage*
+**/coverage.xml
+**/build
+**/dist
+**/*.egg-info
+
+# Virtual envs (workspace .venv is created inside the container)
+.venv
+**/.venv
+venv
+env
+
+# Node / Next.js
+**/node_modules
+**/.next
+**/out
+**/.turbo
+**/coverage
+**/playwright-report
+**/test-results
+
+# Local data (SQLite + scratch files are produced at runtime)
+data/civic_radar.db*
+data/exports
+data/raw_snapshots
+
+# Git + CI
+.git
+.github
+.gitignore
+.gitattributes
+
+# IDE / OS
+.idea
+.vscode
+.DS_Store
+Thumbs.db
+
+# Docs (not needed inside the image)
+docs/*.md
+docs/adr
+docs/*.png
+docs/*.svg
+
+# Editor scratch lockfile backups
+apps/web/pnpm-lock.yaml.bak
+
+# Editor scratch
+*.swp
+*.swo
+*~
+
+# Plan/memory artifacts from local tooling
+.claude

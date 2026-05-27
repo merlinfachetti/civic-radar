@@ -1,8 +1,16 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   output: "standalone",
+  // Tell Next.js this is part of a monorepo so the standalone build traces
+  // and copies files from the workspace root rather than just apps/web.
+  outputFileTracingRoot: path.join(__dirname, "../.."),
   experimental: {
     typedRoutes: true,
   },
