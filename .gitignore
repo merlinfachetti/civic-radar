@@ -8,19 +8,22 @@ __pycache__/
 *$py.class
 *.so
 .Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-share/python-wheels/
+/build/
+/develop-eggs/
+/dist/
+/downloads/
+/eggs/
+/.eggs/
+# /lib/ — Python virtualenv layout. Anchored so it does NOT match
+# TypeScript src/lib/ directories anywhere in the tree (apps/web/src/lib was
+# being silently ignored, which broke Vercel builds: see ADR notes).
+/lib/
+/lib64/
+/parts/
+/sdist/
+/var/
+/wheels/
+/share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
