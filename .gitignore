@@ -52,6 +52,9 @@ coverage.xml
 dmypy.json
 
 # Node / Next.js
+# We use pnpm — npm/yarn lockfiles are forbidden at the repo root
+package-lock.json
+yarn.lock
 node_modules/
 .next/
 out/
