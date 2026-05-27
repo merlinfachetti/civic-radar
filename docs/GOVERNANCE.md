@@ -1,12 +1,12 @@
 # Governance
 
-> Como decisões são tomadas no CivicRadar, e como você pode se tornar maintainer.
+> How decisions are made on CivicRadar, and how to become a maintainer.
 
 ---
 
-## 🎯 Filosofia
+## 🎯 Philosophy
 
-CivicRadar é um projeto **community-driven** de baixo formalismo. Nosso objetivo é manter contribuições fáceis e decisões transparentes, sem burocracia desnecessária.
+CivicRadar is a **community-driven** project with low formal overhead. The goal is to keep contributions easy and decisions transparent, without unnecessary bureaucracy.
 
 ---
 
@@ -14,155 +14,155 @@ CivicRadar é um projeto **community-driven** de baixo formalismo. Nosso objetiv
 
 ### Contributors
 
-Qualquer pessoa que abra issue, PR, ou participe de discussões. **Todas** contribuições são valorizadas.
+Anyone opening an issue, a PR or participating in discussions. **All** contributions are valued.
 
 ### Maintainers
 
-Pessoas com permissão de merge na `main`. Responsabilidades:
+People with merge permission on `main`. Responsibilities:
 
-- Revisar e mergear PRs
-- Triagem de issues
-- Manter qualidade e direção do projeto
-- Garantir aderência ao Code of Conduct
+- Review and merge PRs
+- Triage issues
+- Maintain quality and direction of the project
+- Enforce the Code of Conduct
 
-**Maintainers iniciais:**
+**Initial maintainers:**
 
 - [@aldenfachetti](https://github.com/aldenfachetti)
 - [@merlinfachetti](https://github.com/merlinfachetti)
 
-### Core Maintainers _(futuro)_
+### Core maintainers _(future)_
 
-Subset de maintainers com permissões adicionais (admin, secrets, billing). Eleitos por consenso dos maintainers atuais quando o projeto crescer.
+Subset of maintainers with additional permissions (admin, secrets, billing). Elected by consensus of current maintainers once the project grows.
 
 ---
 
-## 🗳️ Processo de Decisão
+## 🗳️ Decision-making process
 
-### Lazy Consensus (default)
+### Lazy consensus (default)
 
-Para a **maioria** das decisões — mudanças de código, features, bug fixes, refactors:
+For **most** decisions — code changes, features, bug fixes, refactors:
 
-1. Abra PR ou issue propondo a mudança
-2. Aguarde feedback dos maintainers (até 7 dias)
-3. Se nenhum maintainer objetar, considera-se aprovado
-4. Pelo menos 1 maintainer faz merge
+1. Open a PR or issue describing the change
+2. Wait for feedback from maintainers (up to 7 days)
+3. If no maintainer objects, it is considered approved
+4. At least 1 maintainer performs the merge
 
-**Não é necessário voto formal** para decisões pequenas/médias.
+**No formal vote is required** for small/medium decisions.
 
 ### Architecture Decision Records (ADRs)
 
-Decisões arquiteturais **significativas** requerem ADR:
+Significant architectural decisions require an ADR:
 
-- Mudança de stack (linguagem, framework, DB)
-- Mudança de licença
-- Mudança nos princípios de produto
-- Mudança no schema do banco (breaking)
-- Adição de dependência crítica
+- Stack change (language, framework, DB)
+- License change
+- Change to product principles
+- Breaking change to the DB schema
+- Adding a critical dependency
 
-Processo:
+Process:
 
-1. Abra issue com label `adr-proposal` descrevendo:
-   - **Context** — Por que estamos considerando essa mudança?
-   - **Options** — Quais alternativas foram avaliadas?
-   - **Decision** — Proposta
-   - **Consequences** — Trade-offs aceitos
-2. Discussão aberta por **mínimo 7 dias**
-3. Maintainers votam (👍 / 👎 / 🤔) na issue
-4. Aprovação requer **maioria simples dos maintainers ativos** (>50%)
-5. Após aprovação, ADR é mergeado em `docs/adr/NNNN-titulo.md`
+1. Open an issue labeled `adr-proposal` describing:
+   - **Context** — Why is this being considered?
+   - **Options** — Which alternatives were evaluated?
+   - **Decision** — Proposal
+   - **Consequences** — Accepted trade-offs
+2. Open discussion for **at least 7 days**
+3. Maintainers vote (👍 / 👎 / 🤔) on the issue
+4. Approval requires a **simple majority of active maintainers** (>50%)
+5. Once approved, the ADR is merged at `docs/adr/NNNN-title.md`
 
 ### Veto
 
-Qualquer maintainer pode vetar uma decisão alegando:
-- Conflito com Code of Conduct
-- Risco legal/ético sério
-- Quebra de princípios do PRODUCT_FOUNDATION
+Any maintainer can veto a decision citing:
+- Conflict with the Code of Conduct
+- Serious legal/ethical risk
+- Violation of the principles in PRODUCT_FOUNDATION
 
-Veto requer justificativa pública na issue. Pode ser overridden por **2/3 dos maintainers ativos**.
-
----
-
-## 🚪 Como se tornar maintainer
-
-### Critérios
-
-Não há fórmula rígida, mas geralmente buscamos:
-
-- **Contribuições consistentes** ao longo de pelo menos 2-3 meses
-- **Qualidade técnica** demonstrada em PRs (não apenas quantidade)
-- **Bom convivente** — feedback respeitoso, paciência com novatos
-- **Alinhamento** com princípios do projeto (rastreabilidade, open data, civic tech)
-
-### Processo
-
-1. Maintainer existente nomeia candidato (pode ser self-nomination)
-2. Maintainers discutem em privado (Discussions privadas ou async)
-3. Consenso simples → nova maintainer adicionada à equipe
-4. Anúncio público
+A veto must include a public justification on the issue. It can be overridden by **2/3 of active maintainers**.
 
 ---
 
-## 🚫 Removendo um maintainer
+## 🚪 Becoming a maintainer
 
-Razões aceitáveis:
-- Inatividade por > 12 meses sem aviso
-- Violação grave do Code of Conduct
-- Quebra de confiança da comunidade
+### Criteria
 
-Processo:
-1. Maintainer levanta a questão privadamente
-2. Discussão entre maintainers ativos
-3. Votação majoritária (>50% dos demais ativos)
-4. Decisão comunicada publicamente
+There is no rigid formula, but we generally look for:
 
----
+- **Consistent contributions** over at least 2–3 months
+- **Technical quality** demonstrated in PRs (not just quantity)
+- **Good citizenship** — respectful feedback, patience with newcomers
+- **Alignment** with the project's principles (traceability, open data, civic tech)
 
-## 💰 Financiamento
+### Process
 
-CivicRadar é gratuito e sem fins lucrativos. Se eventualmente receber doações via [GitHub Sponsors](https://github.com/sponsors) ou similar:
-
-- Uso transparente, com relatório público trimestral
-- Prioridade: hospedagem, domínio, ferramentas de scan/análise
-- Nunca usado para pagamento direto a maintainers (a menos que ratificado por toda comunidade em decisão pública)
+1. An existing maintainer nominates a candidate (self-nomination allowed)
+2. Maintainers discuss privately (private Discussions or async)
+3. On simple consensus → the new maintainer is added to the team
+4. Public announcement
 
 ---
 
-## 📄 Licença e CLA
+## 🚫 Removing a maintainer
 
-Por enquanto, **não exigimos CLA** (Contributor License Agreement). Contribuições são automaticamente licenciadas sob a AGPL-3.0 ao serem mergeadas.
+Acceptable reasons:
+- Inactivity for >12 months without notice
+- Serious violation of the Code of Conduct
+- Loss of community trust
 
-Caso futuramente haja necessidade (ex: dual-license para empresas), a mudança requer ADR aprovado.
-
----
-
-## 🤝 Disputas
-
-Conflitos entre contribuidores ou entre contribuidor e maintainer:
-
-1. **Tente resolver diretamente**, com respeito
-2. Se não resolver: mencione **2 maintainers** em comentário privado/email para mediar
-3. Se ainda não resolver: traga para reunião async de maintainers
-4. Decisão final dos maintainers é definitiva, com base no Code of Conduct
+Process:
+1. A maintainer raises the question privately
+2. Discussion among active maintainers
+3. Majority vote (>50% of remaining active maintainers)
+4. Decision communicated publicly
 
 ---
 
-## 📅 Reuniões
+## 💰 Funding
 
-Sem reuniões síncronas obrigatórias. Toda comunicação async via:
+CivicRadar is free and not-for-profit. If donations are ever received via [GitHub Sponsors](https://github.com/sponsors) or similar:
 
-- **GitHub Issues** — tarefas concretas
-- **GitHub Discussions** — ideias, perguntas abertas
-- **PR reviews** — discussão técnica de código
-
-Se a comunidade crescer, podemos adicionar:
-- Office hours mensais (opcional)
-- Reunião de planejamento trimestral
+- Transparent use, with a public quarterly report
+- Priority: hosting, domain, scanning/analysis tooling
+- Never used for direct payments to maintainers (unless ratified by the whole community in a public decision)
 
 ---
 
-## 🔄 Atualizando este documento
+## 📄 License and CLA
 
-Mudanças neste documento requerem:
-- PR com proposta
-- Discussão de **mínimo 14 dias**
-- Aprovação de **maioria absoluta** dos maintainers ativos (>50%)
+For now we **do not require a CLA** (Contributor License Agreement). Contributions are automatically licensed under AGPL-3.0 when merged.
+
+If a future need arises (e.g. dual-licensing for enterprises), the change requires an approved ADR.
+
+---
+
+## 🤝 Disputes
+
+Conflicts between contributors or between contributor and maintainer:
+
+1. **Try to resolve directly**, respectfully
+2. If unresolved: mention **2 maintainers** in a private comment/email to mediate
+3. If still unresolved: bring it to an async maintainers meeting
+4. The maintainers' final decision is binding, grounded on the Code of Conduct
+
+---
+
+## 📅 Meetings
+
+No mandatory synchronous meetings. All communication is async via:
+
+- **GitHub Issues** — concrete tasks
+- **GitHub Discussions** — ideas, open questions
+- **PR reviews** — technical discussion of code
+
+If the community grows, we may add:
+- Monthly office hours (optional)
+- Quarterly planning meeting
+
+---
+
+## 🔄 Updating this document
+
+Changes to this document require:
+- A PR with the proposal
+- A discussion of **at least 14 days**
+- Approval by an **absolute majority** of active maintainers (>50%)

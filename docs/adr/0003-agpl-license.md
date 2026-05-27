@@ -6,65 +6,65 @@
 
 ## Context
 
-Precisamos escolher uma licença open source que:
+We need to choose an open source license that:
 
-- Mantenha o projeto **aberto na prática** (não apenas no nome)
-- Não permita que um competidor fechado pegue o código, hospede como SaaS e nunca contribua de volta
-- Permita uso pessoal/educacional/governamental sem fricção
-- Seja amplamente reconhecida (OSI approved)
+- Keeps the project **open in practice** (not only in name)
+- Prevents a closed competitor from forking the code, hosting it as SaaS and never giving back
+- Allows personal, educational and governmental use without friction
+- Is widely recognized (OSI-approved)
 
-## Options Considered
+## Options considered
 
-| Licença | Modelo | Strong copyleft | Network use | Empresa-friendly |
+| License | Model | Strong copyleft | Network use | Enterprise-friendly |
 |---|---|:---:|:---:|:---:|
-| **AGPL-3.0** | Copyleft | ✅ | ✅ (require source) | Médio |
-| GPL-3.0 | Copyleft | ✅ | ❌ (SaaS escape) | Médio |
-| MPL-2.0 | Weak copyleft | Parcial | ❌ | Alto |
-| Apache-2.0 | Permissive | ❌ | ❌ | Muito alto |
-| MIT | Permissive | ❌ | ❌ | Muito alto |
-| BSL/SSPL | Source-available | ✅ | ✅ | Baixo (não OSI) |
+| **AGPL-3.0** | Copyleft | ✅ | ✅ (requires source) | Medium |
+| GPL-3.0 | Copyleft | ✅ | ❌ (SaaS loophole) | Medium |
+| MPL-2.0 | Weak copyleft | Partial | ❌ | High |
+| Apache-2.0 | Permissive | ❌ | ❌ | Very high |
+| MIT | Permissive | ❌ | ❌ | Very high |
+| BSL/SSPL | Source-available | ✅ | ✅ | Low (not OSI) |
 
-**Network use clause** = exige que código modificado seja disponibilizado mesmo quando "uso" é apenas via rede (SaaS).
+**Network use clause** = requires that modified code be made available even when the "use" is purely network-based (SaaS).
 
 ## Decision
 
-**AGPL-3.0** ([texto oficial](https://www.gnu.org/licenses/agpl-3.0.txt)).
+**AGPL-3.0** ([official text](https://www.gnu.org/licenses/agpl-3.0.txt)).
 
 ## Rationale
 
-CivicRadar é uma **ferramenta de civic-tech** que melhora acesso a informação pública. A licença AGPL-3.0:
+CivicRadar is a **civic-tech tool** that improves access to public information. AGPL-3.0:
 
-1. **Protege o ecossistema aberto** — Forks SaaS fechados são obrigados a publicar modificações
-2. **Encoraja contribuição de volta** — Empresas que querem usar comercialmente precisam contribuir
-3. **Mantém alinhamento com a missão** — Open data não deve virar produto fechado
+1. **Protects the open ecosystem** — Closed SaaS forks are forced to publish their modifications
+2. **Encourages contributions back** — Companies that want to use it commercially must contribute
+3. **Stays aligned with the mission** — Open data should not become a closed product
 
 ## Consequences
 
-### Positivas
+### Positive
 
-- Modificações em fork SaaS devem ser open-source
-- Trabalho da comunidade não é "capturado" por empresa
-- Alinha com filosofia de civic-tech / open data
+- SaaS-fork modifications must be open-source
+- Community work is not "captured" by companies
+- Aligned with the civic-tech / open data philosophy
 
-### Negativas / Trade-offs
+### Negative / trade-offs
 
-- **Adoção empresarial reduzida** — Algumas empresas vetam AGPL por política. Aceitável: nosso foco é comunidade, não enterprise.
-- **Compatibilidade com outras libs** — AGPL é forte; algumas libs MIT/Apache podem coexistir, mas mistura com GPL/LGPL requer cuidado.
-- **Complexidade percebida** — Mais difícil de explicar que MIT.
+- **Reduced enterprise adoption** — Some companies forbid AGPL by policy. Acceptable: our focus is community, not enterprise.
+- **Compatibility with other libs** — AGPL is strong; MIT/Apache libs can coexist, but mixing with GPL/LGPL needs attention.
+- **Perceived complexity** — Harder to explain than MIT.
 
-### Action Items
+### Action items
 
-- `LICENSE` no root com texto completo AGPL-3.0
-- Headers de licença em arquivos críticos? **Não obrigatório** — `LICENSE` no root é suficiente para AGPL
-- `README.md` declara licença e link
-- Considerar dual-license CLA no futuro **apenas** se necessário (requer novo ADR)
+- `LICENSE` at the root with the full AGPL-3.0 text
+- License headers on critical files? **Not required** — `LICENSE` at the root is enough for AGPL
+- `README.md` states the license and links to it
+- Consider a CLA with dual-licensing later **only if** necessary (requires a new ADR)
 
 ## Re-evaluation
 
-Esta decisão pode ser revisitada se:
+This decision can be revisited if:
 
-- Comunidade pedir maioritariamente (votação aberta)
-- Necessidade clara de adoção empresarial (raro para civic-tech)
-- Substituição por licença equivalente ou mais protetora (ex: AGPL-4 se um dia existir)
+- The community asks for it through a majority (open vote)
+- A clear need for enterprise adoption shows up (rare for civic-tech)
+- A future equivalent or stronger license appears (e.g. AGPL-4 if it ever exists)
 
-Mudança de licença requer novo ADR aprovado por maioria absoluta de maintainers.
+Any license change requires a new ADR approved by an absolute majority of maintainers.

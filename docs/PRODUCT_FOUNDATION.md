@@ -2,31 +2,31 @@
 
 # CivicRadar — Product Foundation
 
-> **Open source radar for Brazilian public career opportunities.**  
-> Encontre, filtre e acompanhe concursos públicos brasileiros compatíveis com o seu perfil.
+> **Open source radar for Brazilian public career opportunities.**
+> Find, filter and track Brazilian public tenders that match your profile.
 
 ---
 
 ## 1. Product Summary
 
-**CivicRadar** é uma aplicação open source para monitorar, organizar, filtrar e recomendar concursos públicos brasileiros com base em área de interesse, localização, escolaridade, salário, cargo e palavras-chave.
+**CivicRadar** is an open source application to monitor, organize, filter and recommend Brazilian public tenders based on area of interest, location, education, salary, position and keywords.
 
-O produto nasce como uma ferramenta de **civic tech**: seu objetivo é facilitar o acesso a informações públicas espalhadas em diferentes fontes, sem substituir os canais oficiais.
+The product is born as a **civic-tech** tool: its goal is to make public information scattered across many sources easier to access, without replacing the official channels.
 
-A aplicação deve sempre priorizar:
+The application must always prioritize:
 
-- transparência;
-- rastreabilidade da fonte;
-- respeito às fontes oficiais;
-- baixo custo de operação;
-- facilidade de contribuição open source;
-- utilidade real para quem busca uma oportunidade pública.
+- transparency;
+- source traceability;
+- respect for official sources;
+- low operating cost;
+- ease of open source contribution;
+- real-world usefulness for someone hunting a public opportunity.
 
 ---
 
 ## 2. Repository Identity
 
-| Item | Definição |
+| Item | Definition |
 |---|---|
 | Product Name | CivicRadar |
 | Repository Name | `civic-radar` |
@@ -34,84 +34,84 @@ A aplicação deve sempre priorizar:
 | Core Language | Python |
 | Backend | FastAPI |
 | Frontend | Next.js + TypeScript |
-| Database MVP | SQLite |
-| Database Production | PostgreSQL |
+| Database (MVP) | SQLite |
+| Database (Production) | PostgreSQL |
 | License Recommendation | AGPL-3.0 |
-| Main Audience | Pessoas buscando concursos públicos no Brasil |
-| Secondary Audience | Desenvolvedores, pesquisadores, civic hackers e comunidades open data |
+| Primary Audience | People hunting Brazilian public tenders |
+| Secondary Audience | Developers, researchers, civic hackers and open data communities |
 
 ---
 
 ## 3. Vision
 
-Criar uma plataforma aberta que ajude pessoas a descobrir oportunidades públicas relevantes no Brasil sem depender de busca manual repetitiva em múltiplos sites, PDFs, portais de bancas e páginas institucionais.
+Create an open platform that helps people discover relevant public opportunities in Brazil without relying on repetitive manual searches across many sites, PDFs, board portals and institutional pages.
 
-O CivicRadar deve funcionar como uma camada de inteligência sobre informações públicas:
+CivicRadar should work as an intelligence layer on top of public information:
 
 ```txt
-Fontes públicas + normalização + filtros + match por perfil + alertas
+Public sources + normalization + filters + profile match + alerts
 ```
 
-A visão de longo prazo é transformar dados fragmentados de concursos públicos em uma base pesquisável, auditável e útil para a sociedade.
+The long-term vision is to turn fragmented Brazilian public-tender data into a searchable, auditable and useful base for society.
 
 ---
 
 ## 4. Problem Statement
 
-Informações sobre concursos públicos no Brasil são altamente fragmentadas.
+Information about Brazilian public tenders is highly fragmented.
 
-Elas podem estar em:
+It can live in:
 
-- sites de bancas organizadoras;
-- portais de prefeituras;
-- páginas de órgãos estaduais;
-- portais federais;
-- PDFs de editais;
-- notícias;
-- agregadores privados;
-- páginas sem padrão técnico;
-- documentos antigos sem atualização clara.
+- organizing-board sites;
+- city-hall portals;
+- state agency pages;
+- federal portals;
+- edital PDFs;
+- news articles;
+- private aggregators;
+- pages without any technical standard;
+- old documents without clear updates.
 
-Para o usuário final, isso gera vários problemas:
+For the end user this creates several problems:
 
-1. **Busca manual cansativa**  
-   A pessoa precisa visitar vários sites repetidamente.
+1. **Exhausting manual hunting**
+   The person has to visit many sites repeatedly.
 
-2. **Baixa clareza**  
-   Editais são longos, técnicos e difíceis de comparar.
+2. **Low clarity**
+   Editais are long, technical and hard to compare.
 
-3. **Perda de prazo**  
-   Inscrições podem abrir e fechar sem que o candidato perceba.
+3. **Missed deadlines**
+   Registrations can open and close without the candidate noticing.
 
-4. **Falta de personalização**  
-   A maioria dos sites lista tudo, mas não responde:  
-   “quais oportunidades realmente servem para mim?”
+4. **Lack of personalization**
+   Most sites list everything, but never answer:
+   "which opportunities actually fit me?"
 
-5. **Fragmentação de fontes**  
-   Cada banca, prefeitura ou órgão publica de uma forma diferente.
+5. **Source fragmentation**
+   Each board, city hall or agency publishes in a different way.
 
-6. **Dificuldade de auditoria**  
-   Muitos agregadores não deixam claro quando a informação foi checada, qual é a fonte original e se há risco de desatualização.
+6. **Hard to audit**
+   Many aggregators do not make it clear when the information was checked, what the original source is or whether it might be stale.
 
 ---
 
 ## 5. Product Opportunity
 
-O CivicRadar pode se diferenciar por ser:
+CivicRadar can stand out by being:
 
 - open source;
-- transparente;
-- focado em rastreabilidade;
-- orientado a fontes oficiais;
-- extensível por contribuidores;
-- simples de rodar localmente;
-- útil tanto para usuários finais quanto para desenvolvedores.
+- transparent;
+- traceability-driven;
+- biased toward official sources;
+- extensible by contributors;
+- simple to run locally;
+- useful for both end users and developers.
 
-O diferencial não é apenas listar concursos.
+The differentiator is not just listing tenders.
 
-O diferencial é:
+The differentiator is:
 
-> Transformar informações públicas desorganizadas em oportunidades filtráveis, rastreáveis e compreensíveis.
+> Turning disorganized public information into filterable, traceable and understandable opportunities.
 
 ---
 
@@ -119,66 +119,66 @@ O diferencial é:
 
 ### 6.1 Official Sources First
 
-Sempre que possível, o CivicRadar deve priorizar fontes oficiais:
+Whenever possible, CivicRadar must prioritize official sources:
 
-- páginas da banca;
-- páginas do órgão;
-- diários oficiais;
-- páginas de prefeitura;
-- portais públicos.
+- board pages;
+- agency pages;
+- official gazettes;
+- city-hall pages;
+- public portals.
 
-Agregadores podem ser usados como fonte complementar, mas não devem ser tratados como fonte final de verdade.
+Aggregators can be used as complementary sources, but never as the final source of truth.
 
 ---
 
 ### 6.2 Do Not Replace the Official Source
 
-O CivicRadar não substitui edital, banca, órgão ou portal oficial.
+CivicRadar does not replace an edital, board, agency or official portal.
 
-A aplicação deve sempre exibir:
+The application must always display:
 
-- link da fonte original;
-- data da última verificação;
-- status da oportunidade;
-- nível de confiança da fonte;
-- aviso de que o usuário deve confirmar informações no canal oficial.
+- the original source link;
+- the date of the last verification;
+- the opportunity status;
+- the source confidence level;
+- a notice telling the user to confirm the information on the official channel.
 
 ---
 
 ### 6.3 Open Data Mindset
 
-O projeto deve tratar informação pública com responsabilidade.
+The project must treat public information with responsibility.
 
-O objetivo é melhorar acesso, organização e descoberta, não capturar, vender ou esconder dados públicos.
+The goal is to improve access, organization and discovery — not to capture, sell or hide public data.
 
 ---
 
 ### 6.4 Low Infrastructure Dependency
 
-O MVP deve ser simples de rodar localmente:
+The MVP must be simple to run locally:
 
 ```bash
 git clone
 docker compose up
 ```
 
-A primeira versão deve evitar dependências complexas de cloud, filas pesadas ou integrações pagas.
+The first release must avoid complex cloud dependencies, heavy queues or paid integrations.
 
 ---
 
 ### 6.5 Contribution-Friendly
 
-O projeto deve ser fácil para outros desenvolvedores contribuírem.
+The project must be easy for other developers to contribute to.
 
-Isso exige:
+That requires:
 
-- documentação clara;
-- issues bem definidas;
-- exemplos de fontes;
-- testes para crawlers/parsers;
-- fixtures de HTML/PDF;
-- arquitetura modular;
-- guia de contribuição.
+- clear documentation;
+- well-defined issues;
+- source examples;
+- tests for crawlers/parsers;
+- HTML/PDF fixtures;
+- modular architecture;
+- a contribution guide.
 
 ---
 
@@ -186,55 +186,55 @@ Isso exige:
 
 ### 7.1 Primary Persona — Candidate
 
-Pessoa que busca concursos públicos e quer acompanhar oportunidades compatíveis com seu perfil.
+A person hunting Brazilian public tenders who wants to track opportunities matching their profile.
 
-**Necessidades:**
+**Needs:**
 
-- encontrar concursos relevantes;
-- filtrar por área;
-- filtrar por localidade;
-- saber prazo de inscrição;
-- receber alertas;
-- acessar fonte oficial;
-- entender rapidamente se vale a pena ler o edital.
+- find relevant tenders;
+- filter by area;
+- filter by location;
+- know the registration deadline;
+- receive alerts;
+- reach the official source;
+- quickly understand whether it is worth reading the edital.
 
-**Exemplo:**
+**Example:**
 
 ```txt
-Quero concursos de TI no Brasil, preferencialmente remotos ou em SP/RJ/PR,
-com salário acima de R$ 6.000 e nível superior.
+I want IT tenders in Brazil, preferably remote or in SP/RJ/PR,
+with a salary above R$ 6,000 and superior education.
 ```
 
 ---
 
 ### 7.2 Secondary Persona — Contributor
 
-Desenvolvedor ou civic hacker interessado em melhorar acesso a informações públicas.
+A developer or civic hacker interested in improving access to public information.
 
-**Necessidades:**
+**Needs:**
 
-- adicionar novas fontes;
-- melhorar parser de edital;
-- criar testes;
-- corrigir bugs;
-- melhorar documentação;
-- reaproveitar API aberta.
+- add new sources;
+- improve the edital parser;
+- write tests;
+- fix bugs;
+- improve documentation;
+- reuse the open API.
 
 ---
 
 ### 7.3 Tertiary Persona — Researcher / Journalist
 
-Pessoa interessada em analisar dados públicos de concursos.
+A person interested in analyzing public tender data.
 
-**Necessidades:**
+**Needs:**
 
-- ver histórico;
-- consultar oportunidades por órgão;
-- analisar padrões por estado;
-- verificar fontes;
-- exportar dados.
+- view history;
+- query opportunities per agency;
+- analyze patterns per state;
+- verify sources;
+- export data.
 
-Essa persona não é foco do MVP, mas pode guiar decisões futuras.
+This persona is not the MVP focus, but it can guide future decisions.
 
 ---
 
@@ -244,35 +244,27 @@ Essa persona não é foco do MVP, mas pode guiar decisões futuras.
 
 > CivicRadar helps people find, filter and track Brazilian public tenders that match their profile.
 
-### PT-BR
-
-> O CivicRadar ajuda pessoas a encontrar, filtrar e acompanhar concursos públicos brasileiros compatíveis com seu perfil.
-
 ### Open Source Positioning
 
 > Open source intelligence for Brazilian public career opportunities.
-
-### PT-BR
-
-> Inteligência aberta para acompanhar oportunidades de carreira pública no Brasil.
 
 ---
 
 ## 9. MVP Scope
 
-O MVP deve ser pequeno, útil e validável.
+The MVP must be small, useful and provable.
 
 ### 9.1 MVP Goal
 
-Criar uma versão funcional que:
+Build a functional version that:
 
-1. coleta oportunidades de fontes configuradas;
-2. normaliza os dados principais;
-3. armazena em banco local;
-4. expõe API pública;
-5. exibe interface web com filtros;
-6. mostra link para a fonte original;
-7. calcula um match básico com base no perfil do usuário.
+1. collects opportunities from configured sources;
+2. normalizes the main fields;
+3. stores them in a local database;
+4. exposes a public API;
+5. shows a web interface with filters;
+6. links to the original source;
+7. computes a basic match against a user profile.
 
 ---
 
@@ -280,59 +272,59 @@ Criar uma versão funcional que:
 
 ### 10.1 Opportunity Listing
 
-Listar concursos/oportunidades com os campos principais:
+List tenders / opportunities with the main fields:
 
-- título;
-- órgão;
-- banca;
-- cargo;
-- área;
-- estado;
-- cidade;
-- escolaridade;
-- salário mínimo;
-- salário máximo;
+- title;
+- organization;
+- board;
+- position;
+- area;
+- state;
+- city;
+- education level;
+- minimum salary;
+- maximum salary;
 - status;
-- data de abertura de inscrição;
-- data final de inscrição;
-- data de prova, quando disponível;
-- link da fonte;
-- data da última verificação.
+- registration start date;
+- registration end date;
+- exam date, when available;
+- source link;
+- date of the last verification.
 
 ---
 
 ### 10.2 Filters
 
-Filtros iniciais:
+Initial filters:
 
-- área de interesse;
-- estado;
-- cidade;
-- escolaridade;
-- salário mínimo;
+- area of interest;
+- state;
+- city;
+- education level;
+- minimum salary;
 - status;
-- banca;
-- órgão;
-- palavra-chave.
+- board;
+- agency;
+- keyword.
 
 ---
 
 ### 10.3 Opportunity Detail Page
 
-Página de detalhe com:
+Detail page with:
 
-- resumo da oportunidade;
-- dados normalizados;
-- fonte original;
+- opportunity summary;
+- normalized fields;
+- original source;
 - status;
-- histórico mínimo de verificação;
-- aviso de conferência oficial.
+- minimal verification history;
+- official-confirmation notice.
 
 ---
 
 ### 10.4 Basic Profile Match
 
-O usuário poderá informar um perfil simples:
+The user can supply a simple profile:
 
 ```json
 {
@@ -344,20 +336,20 @@ O usuário poderá informar um perfil simples:
 }
 ```
 
-O sistema retorna um score de compatibilidade.
+The system returns a compatibility score.
 
-Exemplo:
+Example:
 
 ```txt
 Match: 87%
-Motivo: área compatível, salário acima do mínimo, inscrições abertas e cargo relacionado a tecnologia.
+Reason: matching area, salary above the minimum, registration open, and IT-related role.
 ```
 
 ---
 
 ### 10.5 Source Traceability
 
-Toda oportunidade deve conter:
+Every opportunity must include:
 
 - `source_name`;
 - `source_url`;
@@ -370,7 +362,7 @@ Toda oportunidade deve conter:
 
 ### 10.6 Basic Admin/Developer CLI
 
-O MVP pode ter uma CLI simples para desenvolvimento:
+The MVP can ship with a simple developer CLI:
 
 ```bash
 python -m civic_radar crawl --source cebraspe
@@ -383,47 +375,47 @@ python -m civic_radar export --format json
 
 ## 11. Out of Scope for MVP
 
-Não implementar no MVP:
+Not in the MVP:
 
-- login obrigatório;
-- pagamento;
-- plano premium;
-- IA generativa;
-- parsing perfeito de todos os editais;
-- app mobile nativo;
-- alertas por WhatsApp;
-- sistema complexo de permissões;
-- crawling massivo sem controle;
-- scraping agressivo;
-- armazenamento integral de PDFs de terceiros;
-- painel administrativo completo.
+- mandatory login;
+- payments;
+- premium plan;
+- generative AI;
+- perfect parsing of every edital;
+- a native mobile app;
+- WhatsApp alerts;
+- complex permission system;
+- massive uncontrolled crawling;
+- aggressive scraping;
+- full storage of third-party PDFs;
+- a complete admin dashboard.
 
-Esses pontos podem entrar em versões futuras.
+These items can ship in future versions.
 
 ---
 
 ## 12. Product Boundaries
 
-O CivicRadar deve ser cuidadoso com o que ele promete.
+CivicRadar must be careful with what it promises.
 
 ### 12.1 The Product Is
 
-- um radar;
-- um indexador;
-- um normalizador;
-- uma ferramenta de descoberta;
-- uma camada de filtros e match;
-- um projeto open source de utilidade pública.
+- a radar;
+- an indexer;
+- a normalizer;
+- a discovery tool;
+- a filter and match layer;
+- an open source project of public interest.
 
 ### 12.2 The Product Is Not
 
-- uma fonte oficial;
-- uma banca organizadora;
-- um substituto do edital;
-- um serviço jurídico;
-- uma garantia de inscrição;
-- uma garantia de aprovação;
-- um agregador comercial fechado.
+- an official source;
+- an organizing board;
+- a replacement for the edital;
+- a legal service;
+- a guarantee of registration;
+- a guarantee of approval;
+- a closed commercial aggregator.
 
 ---
 
@@ -433,10 +425,10 @@ O CivicRadar deve ser cuidadoso com o que ele promete.
 
 ```mermaid
 flowchart TD
-    A[Usuário acessa CivicRadar] --> B[Seleciona filtros]
-    B --> C[Visualiza oportunidades compatíveis]
-    C --> D[Abre detalhe]
-    D --> E[Acessa fonte oficial]
+    A[User opens CivicRadar] --> B[Picks filters]
+    B --> C[Sees matching opportunities]
+    C --> D[Opens detail]
+    D --> E[Visits the official source]
 ```
 
 ---
@@ -445,10 +437,10 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    A[Usuário informa perfil] --> B[Sistema compara perfil com oportunidades]
-    B --> C[Calcula score]
-    C --> D[Exibe oportunidades ordenadas por compatibilidade]
-    D --> E[Mostra motivo do match]
+    A[User supplies a profile] --> B[System compares profile vs opportunities]
+    B --> C[Computes score]
+    C --> D[Shows opportunities ordered by compatibility]
+    D --> E[Surfaces the match reason]
 ```
 
 ---
@@ -474,12 +466,12 @@ flowchart TD
 
 | Source Type | Priority | Notes |
 |---|---:|---|
-| Official agency pages | High | Preferencial |
-| Organizing boards | High | Ex: Cebraspe, FGV, FCC, Vunesp |
-| Official government portals | High | Quando disponíveis |
-| Municipal websites | Medium | Difícil padronização |
-| Public notices / official gazettes | Medium | Alto valor, parsing mais difícil |
-| Aggregator sites | Low/Medium | Complementares, não fonte final |
+| Official agency pages | High | Preferred |
+| Organizing boards | High | e.g. Cebraspe, FGV, FCC, Vunesp |
+| Official government portals | High | When available |
+| Municipal websites | Medium | Hard to standardize |
+| Public notices / official gazettes | Medium | High value, harder to parse |
+| Aggregator sites | Low/Medium | Complementary, never the final source |
 
 ---
 
@@ -487,15 +479,15 @@ flowchart TD
 
 | Level | Meaning |
 |---|---|
-| High | Fonte oficial ou banca organizadora |
-| Medium | Portal público institucional, mas sem padrão claro |
-| Low | Agregador ou página sem rastreabilidade forte |
+| High | Official source or organizing board |
+| Medium | Public institutional portal, no clear standard |
+| Low | Aggregator or page with weak traceability |
 
 ---
 
 ### 14.3 Source Metadata
 
-Cada fonte deve ser descrita por um arquivo de configuração:
+Each source must be described by a configuration file:
 
 ```yaml
 id: cebraspe
@@ -513,11 +505,11 @@ quality_level: high
 
 ## 15. Matching Logic
 
-O MVP deve começar com scoring determinístico e simples.
+The MVP starts with simple deterministic scoring.
 
 ### 15.1 Suggested Score Weights
 
-| Criteria | Weight |
+| Criterion | Weight |
 |---|---:|
 | Area match | 30 |
 | Keyword match | 20 |
@@ -537,10 +529,10 @@ Total: 100 points.
   "opportunity_id": "uuid",
   "score": 87,
   "reasons": [
-    "Área compatível com Tecnologia",
-    "Cargo contém palavra-chave: analista de sistemas",
-    "Salário acima do mínimo informado",
-    "Inscrições abertas"
+    "Area matches Tecnologia",
+    "Position contains the keyword: analista de sistemas",
+    "Salary above the minimum",
+    "Registrations are open"
   ]
 }
 ```
@@ -554,12 +546,12 @@ Total: 100 points.
 | Page | Description |
 |---|---|
 | `/` | Landing page + search |
-| `/opportunities` | Listagem com filtros |
-| `/opportunities/[id]` | Detalhe da oportunidade |
-| `/profile-match` | Match com perfil local |
-| `/sources` | Fontes monitoradas |
-| `/about` | Sobre o projeto open source |
-| `/contribute` | Como contribuir |
+| `/opportunities` | List with filters |
+| `/opportunities/[id]` | Opportunity detail |
+| `/profile-match` | Match against a local profile |
+| `/sources` | Monitored sources |
+| `/about` | About the open source project |
+| `/contribute` | How to contribute |
 
 ---
 
@@ -568,11 +560,11 @@ Total: 100 points.
 | Resource | Description |
 |---|---|
 | `/health` | Healthcheck |
-| `/opportunities` | Lista oportunidades |
-| `/opportunities/{id}` | Detalhe |
-| `/sources` | Lista fontes |
-| `/match` | Calcula compatibilidade |
-| `/stats` | Estatísticas públicas |
+| `/opportunities` | List opportunities |
+| `/opportunities/{id}` | Detail |
+| `/sources` | List sources |
+| `/match` | Compute compatibility |
+| `/stats` | Public statistics |
 
 ---
 
@@ -586,7 +578,7 @@ FastAPI
 SQLAlchemy
 Pydantic
 Alembic
-SQLite for MVP
+SQLite for the MVP
 PostgreSQL for production
 ```
 
@@ -626,11 +618,11 @@ GitHub Actions
 
 ### 17.5 API Documentation
 
-The project should follow a contract-first mindset.
+The project follows a contract-first mindset.
 
-- OpenAPI should be exposed by FastAPI.
-- API docs should be available locally.
-- Future API reference can use Scalar or Swagger UI.
+- FastAPI exposes the OpenAPI spec.
+- The API docs are available locally.
+- The future API reference can use Scalar or Swagger UI.
 
 ---
 
@@ -788,7 +780,7 @@ RawSnapshot
 
 ### 20.4 Match Profile
 
-For MVP, this can be local-only and not persisted.
+For the MVP this can be local-only and not persisted.
 
 ```txt
 MatchProfile
@@ -814,8 +806,8 @@ AGPL-3.0
 
 Reason:
 
-- protects the open nature of the project;
-- discourages closed SaaS forks without contribution;
+- protects the project's open nature;
+- discourages closed SaaS forks that do not contribute back;
 - keeps improvements available to the community.
 
 Alternative:
@@ -850,13 +842,13 @@ GOVERNANCE.md
 Good first contribution areas:
 
 - add a new source;
-- fix parser;
-- improve UI;
+- fix a parser;
+- improve the UI;
 - add tests;
 - improve documentation;
 - add fixtures;
 - improve accessibility;
-- translate UI;
+- translate the UI;
 - improve source quality scoring.
 
 ---
@@ -885,18 +877,18 @@ performance
 
 ## 22. Legal and Ethical Guardrails
 
-The CivicRadar should follow these rules:
+CivicRadar must follow these rules:
 
 1. Always link to the original source.
 2. Do not claim to be an official source.
 3. Do not store unnecessary personal data.
-4. Do not aggressively crawl websites.
+4. Do not crawl aggressively.
 5. Respect robots.txt and source terms when applicable.
 6. Do not republish full copyrighted content when not necessary.
 7. Store metadata and summaries, not full third-party pages as public content.
 8. Make source freshness visible.
 9. Make parser confidence visible.
-10. Add disclaimers telling users to verify information officially.
+10. Add disclaimers telling users to verify information through the official channel.
 
 ---
 
@@ -906,14 +898,14 @@ The MVP should avoid user accounts.
 
 Recommended MVP behavior:
 
-- profile matching runs locally or with temporary request payload;
-- no personal data required;
+- profile matching runs locally or with a temporary request payload;
+- no personal data is required;
 - no tracking by default;
 - no analytics unless explicitly configured;
 - no cookies unless needed;
 - no email alerts in the first version unless self-hosted.
 
-Future user accounts should be optional.
+Future user accounts must be optional.
 
 ---
 
@@ -921,12 +913,12 @@ Future user accounts should be optional.
 
 ### 24.1 Product Metrics
 
-| Metric | Target for MVP |
+| Metric | MVP Target |
 |---|---:|
 | Number of sources supported | 3 to 5 |
 | Opportunities indexed | 50+ |
 | Filter response time | < 500ms local |
-| API response time | < 300ms for common queries |
+| API response time | < 300ms on common queries |
 | Match explanation coverage | 100% of match results |
 | Source traceability | 100% of opportunities |
 
@@ -940,7 +932,7 @@ Future user accounts should be optional.
 | Good first issues | 5+ |
 | Setup time | < 10 minutes |
 | Test coverage for parsers | Basic |
-| Docker Compose working | Yes |
+| Docker Compose works | Yes |
 | Contribution guide | Yes |
 
 ---
@@ -952,13 +944,13 @@ The MVP is considered successful when:
 - a developer can run the project locally using Docker Compose;
 - at least 3 sources are configured;
 - opportunities are stored in SQLite;
-- API exposes opportunities with filters;
-- frontend lists opportunities;
-- details page links to source original;
-- match endpoint returns score and reasons;
-- README explains setup and project purpose;
-- license is included;
-- contribution guide exists.
+- the API exposes opportunities with filters;
+- the frontend lists opportunities;
+- the detail page links to the original source;
+- the match endpoint returns score and reasons;
+- the README explains setup and project purpose;
+- the license is included;
+- the contribution guide exists.
 
 ---
 
@@ -1068,14 +1060,14 @@ Some sources may not allow scraping or may restrict usage.
 - respect robots.txt;
 - use rate limits;
 - store metadata only;
-- link back to source;
-- avoid republication of full content.
+- link back to the source;
+- avoid republishing full content.
 
 ---
 
 ### 27.3 Data Staleness
 
-Concursos can change status, dates or links.
+Tenders can change status, dates or links.
 
 **Mitigation:**
 
@@ -1095,7 +1087,7 @@ Sites can change layout.
 - automated tests with fixtures;
 - monitoring parser failures;
 - parser versioning;
-- clear source status dashboard.
+- a clear source status dashboard.
 
 ---
 
@@ -1106,8 +1098,8 @@ The project could become too complex before proving value.
 **Mitigation:**
 
 - SQLite first;
-- no login in MVP;
-- no AI in MVP;
+- no login in the MVP;
+- no AI in the MVP;
 - limited sources;
 - simple deterministic scoring.
 
@@ -1119,7 +1111,7 @@ Potential future features:
 
 - public API;
 - hosted version;
-- alerts by email;
+- email alerts;
 - saved searches;
 - browser notifications;
 - edital diff;
@@ -1128,7 +1120,7 @@ Potential future features:
 - historical salary analytics;
 - regional dashboards;
 - community source submissions;
-- integration with official gazettes;
+- official-gazette integration;
 - semantic search over edital content;
 - AI-based summary with clear disclaimers.
 
@@ -1158,23 +1150,19 @@ Open source radar for Brazilian public career opportunities.
 Find, filter and track Brazilian public tenders that match your profile.
 ```
 
-```txt
-Inteligência aberta para acompanhar oportunidades de carreira pública no Brasil.
-```
-
 ---
 
 ## 30. Recommended First Build Sequence
 
-1. Create repository.
+1. Create the repository.
 2. Add README, LICENSE, CONTRIBUTING and this product foundation.
-3. Create FastAPI skeleton.
-4. Add SQLite models.
-5. Create source config structure.
-6. Implement first crawler.
+3. Create the FastAPI skeleton.
+4. Add the SQLite models.
+5. Create the source config structure.
+6. Implement the first crawler.
 7. Save normalized opportunities.
 8. Expose `/opportunities`.
-9. Build web list with filters.
+9. Build the web list with filters.
 10. Add match scoring.
 11. Add tests.
 12. Publish MVP roadmap issues.
@@ -1185,22 +1173,18 @@ Inteligência aberta para acompanhar oportunidades de carreira pública no Brasi
 
 | Date | Decision | Reason |
 |---|---|---|
-| TBD | Use `CivicRadar` as product name | Short, English, civic-tech friendly and expandable |
-| TBD | Use Python + FastAPI | Strong fit for crawling, parsing and API |
-| TBD | Use SQLite for MVP | Easy local setup for open source contributors |
-| TBD | Use AGPL-3.0 | Protects open source nature in hosted/SaaS scenarios |
-| TBD | Avoid login in MVP | Reduces complexity and privacy surface |
-| TBD | Avoid AI in MVP | Focus on reliable data foundation first |
+| TBD | Use `CivicRadar` as the product name | Short, English, civic-tech-friendly and expandable |
+| TBD | Use Python + FastAPI | Strong fit for crawling, parsing and APIs |
+| TBD | Use SQLite for the MVP | Easy local setup for open source contributors |
+| TBD | Use AGPL-3.0 | Protects the open source nature in hosted/SaaS scenarios |
+| TBD | Avoid login in the MVP | Reduces complexity and privacy surface |
+| TBD | Avoid AI in the MVP | Focus on a reliable data foundation first |
 
 ---
 
 ## 32. Final Product Definition
 
-**CivicRadar** is an open source platform that monitors, normalizes and recommends Brazilian public tender opportunities based on user interests, always preserving traceability to official sources.
-
-In PT-BR:
-
-**CivicRadar** é uma plataforma open source que monitora, normaliza e recomenda concursos públicos brasileiros com base no perfil do usuário, sempre preservando rastreabilidade para as fontes oficiais.
+**CivicRadar** is an open source platform that monitors, normalizes and recommends Brazilian public tender opportunities based on user interests, always preserving traceability to the official sources.
 
 ---
 

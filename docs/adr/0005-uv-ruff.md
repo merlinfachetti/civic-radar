@@ -6,102 +6,102 @@
 
 ## Context
 
-Tooling Python tradicional (`pip` + `virtualenv` + `setup.py` + `black` + `isort` + `flake8` + `pytest`) é fragmentado e lento. Projetos open source modernos (2025-2026) estão consolidando em alternativas Rust-based muito mais rápidas e melhor integradas.
+Traditional Python tooling (`pip` + `virtualenv` + `setup.py` + `black` + `isort` + `flake8` + `pytest`) is fragmented and slow. Modern open source projects (2025–2026) are consolidating around Rust-based alternatives that are much faster and better integrated.
 
-Para CivicRadar, queremos setup local em segundos para contribuidores.
+For CivicRadar we want sub-second local setup for contributors.
 
-## Options Considered
+## Options considered
 
 ### Package management & venv
 
 | Tool | Speed | Ecosystem | Modern |
 |---|---|---|---|
-| **uv** | 10-100× pip | Crescendo rápido | ⭐⭐⭐ |
-| Poetry | ~pip | Maduro | ⭐⭐ |
-| pip + venv | Lento | Padrão | ⭐ |
-| Rye | Rápido | Em transição para uv | ⭐⭐ |
-| pdm | Rápido | Pequeno | ⭐⭐ |
+| **uv** | 10-100× pip | Growing fast | ⭐⭐⭐ |
+| Poetry | ~pip | Mature | ⭐⭐ |
+| pip + venv | Slow | Standard | ⭐ |
+| Rye | Fast | Migrating to uv | ⭐⭐ |
+| pdm | Fast | Small | ⭐⭐ |
 
-### Linter & Formatter
+### Linter & formatter
 
-| Tool | Substitui | Speed |
+| Tool | Replaces | Speed |
 |---|---|---|
-| **ruff** | black, isort, flake8, pylint (parcial), pydocstyle, pyupgrade | 10-100× |
-| black + isort + flake8 | — | Lento |
+| **ruff** | black, isort, flake8, pylint (partial), pydocstyle, pyupgrade | 10-100× |
+| black + isort + flake8 | — | Slow |
 
 ### Type checker
 
 | Tool | Notes |
 |---|---|
-| **mypy** | Maduro, padrão |
-| pyright | Rápido (Rust), mas ecosystem menor |
-| pyre | Facebook, complexo |
+| **mypy** | Mature, standard |
+| pyright | Fast (Rust), but smaller ecosystem |
+| pyre | Facebook, complex |
 
 ### Test runner
 
 | Tool | Notes |
 |---|---|
-| **pytest** | Padrão indiscutível |
+| **pytest** | Undisputed standard |
 
 ## Decision
 
-| Camada | Escolha |
+| Layer | Pick |
 |---|---|
 | Package manager + venv | **uv** |
 | Lint + format | **ruff** (`check` + `format`) |
 | Type check | **mypy** (strict mode) |
 | Test runner | **pytest** + pytest-asyncio + pytest-cov |
 | Coverage | **coverage.py** (via pytest-cov) |
-| Mock HTTP | **respx** (para httpx) |
+| HTTP mock | **respx** (for httpx) |
 | Time mocking | **freezegun** |
 
 ## Rationale
 
 ### uv
 
-- Escrito em Rust pela [Astral](https://astral.sh/) (criadores do ruff)
-- `uv sync` em segundos onde Poetry leva minutos
-- Suporte nativo a `pyproject.toml`
-- Pode instalar Python automaticamente (`uv python install 3.12`)
-- Workspaces para monorepo
-- Active development; já é stable
+- Rust binary from [Astral](https://astral.sh/) (the ruff authors)
+- `uv sync` in seconds where Poetry takes minutes
+- Native `pyproject.toml` support
+- Can install Python automatically (`uv python install 3.12`)
+- Workspaces for monorepos
+- Active development; already stable
 
 ### ruff
 
-- Substitui 5+ ferramentas em um único binário
-- Configuração unificada no `pyproject.toml`
-- Auto-fix poderoso
-- Format compatível com black
+- Replaces 5+ tools with a single binary
+- Unified configuration in `pyproject.toml`
+- Powerful auto-fix
+- Format compatible with black
 
 ### mypy `--strict`
 
-- Padrão da comunidade
-- Pyright seria mais rápido mas mypy tem ecosystem maduro
-- Strict mode pega ~95% de erros de tipo em tempo de dev
+- Community standard
+- Pyright would be faster but mypy has the richer ecosystem
+- Strict mode catches ~95% of type errors at development time
 
 ## Consequences
 
-### Positivas
+### Positive
 
-- **Setup local em ~5 segundos** (`uv sync`)
-- Um único comando para lint: `uv run ruff check --fix .`
-- Pre-commit hooks rápidos
-- CI lint job em segundos
+- **Local setup in ~5 seconds** (`uv sync`)
+- A single command lints everything: `uv run ruff check --fix .`
+- Fast pre-commit hooks
+- CI lint job runs in seconds
 
-### Negativas / Trade-offs
+### Negative / trade-offs
 
-- **uv ainda em rápida evolução** — Pode ter quebra de compatibilidade em majors
-  - **Mitigação:** Pin uv version em CI; documentar versão recomendada
-- **Devs sem familiaridade com uv** — Curva curta mas existe
-  - **Mitigação:** Comandos básicos em CONTRIBUTING.md
-- **Ruff não substitui mypy** — Type checking ainda requer mypy
-  - **Mitigação:** OK, ruff + mypy é stack padrão
+- **uv still evolves fast** — Possible compatibility breaks in major versions
+  - **Mitigation:** Pin uv version in CI; document the recommended version
+- **Devs unfamiliar with uv** — Short but real learning curve
+  - **Mitigation:** Cheat sheet in CONTRIBUTING.md
+- **Ruff does not replace mypy** — Type checking still requires mypy
+  - **Mitigation:** OK, ruff + mypy is the modern standard pair
 
-### Action Items
+### Action items
 
-- `pyproject.toml` na raiz com `[tool.uv.workspace]` para monorepo
-- `[tool.ruff]` config compartilhada
-- `[tool.mypy]` strict
-- `[tool.pytest.ini_options]` com `--cov-fail-under=70`
-- Documentar comandos em README e CONTRIBUTING
-- Pre-commit hook para `ruff check --fix && ruff format`
+- `pyproject.toml` at the root with `[tool.uv.workspace]` for the monorepo
+- Shared `[tool.ruff]` config
+- Strict `[tool.mypy]`
+- `[tool.pytest.ini_options]` with `--cov-fail-under=70`
+- Document commands in README and CONTRIBUTING
+- Pre-commit hook for `ruff check --fix && ruff format`

@@ -2,9 +2,9 @@
 
 # 🛰️ CivicRadar
 
-### **Open source radar para oportunidades de carreira pública no Brasil**
+### **Open source radar for Brazilian public career opportunities**
 
-_Encontre, filtre e acompanhe concursos públicos brasileiros compatíveis com o seu perfil._
+_Find, filter and track Brazilian public tenders that match your profile._
 
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg?style=flat-square)](./LICENSE)
 [![CI — API](https://img.shields.io/github/actions/workflow/status/merlinfachetti/civic-radar/ci-api.yml?branch=main&label=api&style=flat-square)](https://github.com/merlinfachetti/civic-radar/actions/workflows/ci-api.yml)
@@ -21,39 +21,39 @@ _Encontre, filtre e acompanhe concursos públicos brasileiros compatíveis com o
 
 ## 🎯 Why CivicRadar?
 
-Informações sobre concursos públicos no Brasil são **altamente fragmentadas** — espalhadas entre sites de bancas, prefeituras, portais de órgãos, PDFs de editais e agregadores privados sem padronização.
+Information about Brazilian public tenders is **highly fragmented** — scattered across exam-board sites, city halls, agency portals, edital PDFs and private aggregators with no shared format.
 
-Para quem está procurando uma oportunidade, isso significa horas perdidas caçando edital por edital, perdendo prazos e tentando comparar requisitos em formatos diferentes.
+For someone looking for an opportunity, that translates into hours of manual hunting site by site, missed deadlines and requirements that are hard to compare across formats.
 
-**CivicRadar transforma essa fragmentação em um radar pesquisável, filtrável e rastreável.** É um projeto **open source civic-tech** que respeita as fontes oficiais (sempre linkando de volta), prioriza rastreabilidade, e usa scoring determinístico para responder à pergunta:
+**CivicRadar turns that fragmentation into a searchable, filterable, traceable radar.** It is an **open source civic-tech** project that respects official sources (always linking back), prioritizes traceability and uses deterministic scoring to answer the question:
 
-> _"Quais oportunidades realmente fazem sentido para o meu perfil?"_
+> _"Which opportunities actually make sense for my profile?"_
 
 ---
 
 ## ✨ Features
 
-- 🛰️ **Multi-source ingestion** — Crawlers para Cebraspe, FGV, PCI Concursos (extensível via plugin architecture)
-- 🎯 **Match score determinístico** — Algoritmo explicável, sem caixa-preta de IA (área, localização, escolaridade, salário, palavras-chave)
-- 🔍 **Filtros poderosos** — Por área, estado, escolaridade, faixa salarial, status, banca, palavra-chave
-- 📡 **API moderna** — FastAPI com OpenAPI 3.1, Scalar UI bonita em `/docs`, ReDoc em `/redoc`
-- 🎨 **Frontend tech-forward** — Next.js 15 + shadcn/ui + Tailwind v4, dark-first, ⌘K command palette, totalmente responsivo
-- 🔐 **Zero login no MVP** — Perfil de match é local, sem coleta de dados pessoais
-- 📊 **Rastreabilidade total** — Cada oportunidade exibe fonte original, data de verificação, e nível de confiança
-- ⚡ **Setup em < 5 min** — `git clone && docker compose up` e está pronto
-- 🧪 **Test-first** — Fixtures HTML/PDF reais, coverage gate desde o dia 1
-- 🌍 **i18n-ready** — PT-BR primário, EN fallback
+- 🛰️ **Multi-source ingestion** — Crawlers for Cebraspe, FGV and PCI Concursos (extensible via a plugin architecture)
+- 🎯 **Deterministic match score** — Explainable algorithm, no black-box AI (area, location, education, salary, keywords)
+- 🔍 **Powerful filters** — By area, state, education level, salary range, status, board and keyword
+- 📡 **Modern API** — FastAPI with OpenAPI 3.1, slick Scalar UI at `/docs`, ReDoc at `/redoc`
+- 🎨 **Tech-forward frontend** — Next.js 15 + shadcn/ui + Tailwind v4, dark-first, ⌘K command palette, fully responsive
+- 🔐 **No login required for the MVP** — Match profile lives locally, no personal data collection
+- 📊 **Full traceability** — Every opportunity exposes the original source, verification timestamp and confidence level
+- ⚡ **Setup in < 5 min** — `git clone && docker compose up` and you are good to go
+- 🧪 **Test-first** — Real HTML/PDF fixtures, coverage gate from day one
+- 🌍 **i18n-ready** — PT-BR primary (the audience), EN fallback
 
 ---
 
 ## 🚀 Quick Start
 
-### Pré-requisitos
+### Prerequisites
 
-- [Docker](https://docs.docker.com/get-docker/) + [Docker Compose](https://docs.docker.com/compose/install/) — _setup mais simples_
-- **OU** [uv](https://docs.astral.sh/uv/) (Python 3.12+) + [pnpm](https://pnpm.io/) (Node 20+) para dev nativo
+- [Docker](https://docs.docker.com/get-docker/) + [Docker Compose](https://docs.docker.com/compose/install/) — _simplest path_
+- **OR** [uv](https://docs.astral.sh/uv/) (Python 3.12+) + [pnpm](https://pnpm.io/) (Node 20+) for native dev
 
-### Via Docker (recomendado)
+### Docker (recommended)
 
 ```bash
 git clone https://github.com/merlinfachetti/civic-radar.git
@@ -61,56 +61,56 @@ cd civic-radar
 docker compose up -d
 ```
 
-Pronto. Acesse:
+That is it. Open:
 
-| Serviço | URL | Descrição |
+| Service | URL | Description |
 |---|---|---|
-| 🌐 **Web** | http://localhost:3000 | Interface principal |
+| 🌐 **Web** | http://localhost:3000 | Main interface |
 | 📡 **API** | http://localhost:8000 | FastAPI |
-| 📖 **Docs (Scalar)** | http://localhost:8000/docs | OpenAPI navegável |
-| 📚 **ReDoc** | http://localhost:8000/redoc | Documentação alternativa |
-| 💚 **Health** | http://localhost:8000/health | Status do serviço |
+| 📖 **Docs (Scalar)** | http://localhost:8000/docs | Navigable OpenAPI |
+| 📚 **ReDoc** | http://localhost:8000/redoc | Alternative documentation |
+| 💚 **Health** | http://localhost:8000/health | Service status |
 
-### Via desenvolvimento nativo
+### Native development
 
 ```bash
 # Backend
 cd apps/api
 uv sync
 uv run alembic upgrade head
-uv run civic_radar seed              # popula com dados de exemplo
+uv run civic_radar seed              # populate with sample data
 uv run civic_radar serve             # http://localhost:8000
 
-# Frontend (em outro terminal)
+# Frontend (in another terminal)
 cd apps/web
 pnpm install
 pnpm dev                             # http://localhost:3000
 
-# Crawlers (offline com fixtures)
+# Crawlers (offline against fixtures)
 cd crawlers
-uv run pytest                        # roda todos os parsers contra fixtures
+uv run pytest                        # runs every parser against fixtures
 ```
 
 ---
 
 ## 🧱 Tech Stack
 
-| Camada | Tecnologia | Por quê |
+| Layer | Technology | Why |
 |---|---|---|
-| **Backend** | [FastAPI](https://fastapi.tiangolo.com/) + [SQLAlchemy 2.0](https://www.sqlalchemy.org/) + [Pydantic v2](https://docs.pydantic.dev/) | API moderna, async, OpenAPI nativo |
-| **DB MVP** | SQLite (single-file) | Zero dependência externa, `docker compose up` funciona |
-| **DB Prod** | PostgreSQL 16 | Para deploy em produção (configurado via env) |
-| **Migrations** | [Alembic](https://alembic.sqlalchemy.org/) | Versionamento de schema |
+| **Backend** | [FastAPI](https://fastapi.tiangolo.com/) + [SQLAlchemy 2.0](https://www.sqlalchemy.org/) + [Pydantic v2](https://docs.pydantic.dev/) | Modern, async, native OpenAPI |
+| **DB (MVP)** | SQLite (single file) | Zero external dependency, `docker compose up` just works |
+| **DB (prod)** | PostgreSQL 16 | Production deploy (configured via env) |
+| **Migrations** | [Alembic](https://alembic.sqlalchemy.org/) | Schema versioning |
 | **CLI** | [Typer](https://typer.tiangolo.com/) + [Rich](https://rich.readthedocs.io/) | `civic_radar crawl`, `seed`, `export`, `stats` |
-| **Crawlers** | [httpx](https://www.python-httpx.org/) + [selectolax](https://github.com/rushter/selectolax) + [pdfplumber](https://github.com/jsvine/pdfplumber) | Rápido, parsing HTML/PDF moderno |
-| **Logging** | [structlog](https://www.structlog.org/) | JSON estruturado, correlation IDs |
+| **Crawlers** | [httpx](https://www.python-httpx.org/) + [selectolax](https://github.com/rushter/selectolax) + [pdfplumber](https://github.com/jsvine/pdfplumber) | Fast, modern HTML/PDF parsing |
+| **Logging** | [structlog](https://www.structlog.org/) | Structured JSON, correlation IDs |
 | **Frontend** | [Next.js 15](https://nextjs.org/) (App Router) + [React 19](https://react.dev/) | Server Components, streaming, SEO |
-| **UI** | [shadcn/ui](https://ui.shadcn.com/) + [Tailwind v4](https://tailwindcss.com/) + [Framer Motion](https://www.framer.com/motion/) | Componentes owned, dark-first |
-| **State** | [TanStack Query](https://tanstack.com/query) + [Zod](https://zod.dev/) | Cache reativo, validação runtime |
-| **Tooling Python** | [uv](https://docs.astral.sh/uv/) + [ruff](https://docs.astral.sh/ruff/) + [mypy](https://mypy.readthedocs.io/) | Rust-based, 10-100× mais rápido |
-| **Tooling Node** | [pnpm](https://pnpm.io/) | Eficiente para monorepo |
-| **Tests** | [pytest](https://docs.pytest.org/) + [Vitest](https://vitest.dev/) + fixtures reais | TDD desde o dia 1 |
-| **CI** | GitHub Actions (4 workflows) | Feedback rápido por camada |
+| **UI** | [shadcn/ui](https://ui.shadcn.com/) + [Tailwind v4](https://tailwindcss.com/) + [Framer Motion](https://www.framer.com/motion/) | Owned components, dark-first |
+| **State** | [TanStack Query](https://tanstack.com/query) + [Zod](https://zod.dev/) | Reactive cache, runtime validation |
+| **Python tooling** | [uv](https://docs.astral.sh/uv/) + [ruff](https://docs.astral.sh/ruff/) + [mypy](https://mypy.readthedocs.io/) | Rust-based, 10-100× faster |
+| **Node tooling** | [pnpm](https://pnpm.io/) | Efficient for monorepo |
+| **Tests** | [pytest](https://docs.pytest.org/) + [Vitest](https://vitest.dev/) + real fixtures | TDD from day one |
+| **CI** | GitHub Actions (4 workflows) | Fast feedback per layer |
 
 ---
 
@@ -158,7 +158,7 @@ flowchart LR
     N15 --> UI
 ```
 
-Detalhes completos em [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md) e [`docs/TECH_FOUNDATION.md`](./docs/TECH_FOUNDATION.md).
+Full details in [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md) and [`docs/TECH_FOUNDATION.md`](./docs/TECH_FOUNDATION.md).
 
 ---
 
@@ -170,21 +170,22 @@ civic-radar/
 │   ├── api/                  # FastAPI backend
 │   └── web/                  # Next.js frontend
 ├── crawlers/
-│   ├── core/                 # Base classes (plugin architecture)
-│   └── sources/
-│       ├── cebraspe/         # Cebraspe crawler + parser + fixtures
-│       ├── fgv/              # FGV crawler + parser + fixtures
-│       └── pci_concursos/    # PCI Concursos crawler + parser + fixtures
+│   └── crawlers/
+│       ├── core/             # Base classes (plugin architecture)
+│       └── sources/
+│           ├── cebraspe/     # Cebraspe crawler + parser + fixtures
+│           ├── fgv/          # FGV crawler + parser + fixtures
+│           └── pci_concursos/# PCI Concursos crawler + parser + fixtures
 ├── packages/
 │   ├── shared-schemas/       # OpenAPI-derived TS types
 │   └── ui-tokens/            # Design tokens
 ├── data/
-│   └── seeds/                # Seed data para dev local
-├── docs/                     # Toda documentação
+│   └── seeds/                # Local dev seed data
+├── docs/                     # All documentation
 │   ├── PRODUCT_FOUNDATION.md
 │   ├── TECH_FOUNDATION.md
 │   ├── ARCHITECTURE.md
-│   ├── DATA_SOURCES.md       # Como adicionar nova fonte
+│   ├── DATA_SOURCES.md       # How to add a new source
 │   ├── CONTRIBUTING.md
 │   └── adr/                  # Architecture Decision Records
 ├── .github/
@@ -208,54 +209,54 @@ civic-radar/
 | **M5** — Alerts | 📋 Planned | RSS, webhook, email, Telegram/Discord |
 | **M6** — Intelligence | 🔮 Future | LLM-assisted summary, requirement extraction |
 
-Veja o backlog completo nas [Issues](https://github.com/merlinfachetti/civic-radar/issues) e nos [Milestones](https://github.com/merlinfachetti/civic-radar/milestones).
+See the live backlog in [Issues](https://github.com/merlinfachetti/civic-radar/issues) and [Milestones](https://github.com/merlinfachetti/civic-radar/milestones).
 
 ---
 
 ## 🤝 Contributing
 
-CivicRadar **só faz sentido como projeto comunitário**. Toda contribuição é valiosa — desde corrigir um typo, adicionar uma nova fonte, melhorar acessibilidade, traduzir UI, ou trazer ideias novas.
+CivicRadar **only makes sense as a community project**. Every contribution counts — from fixing a typo, to adding a new source, improving accessibility, translating the UI or bringing in fresh ideas.
 
-### Onde começar?
+### Where to start?
 
-- 🌱 **Primeira contribuição:** [issues marcadas como `good first issue`](https://github.com/merlinfachetti/civic-radar/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
-- 📚 **Guia completo:** [`docs/CONTRIBUTING.md`](./docs/CONTRIBUTING.md)
-- ➕ **Adicionar nova fonte:** [`docs/DATA_SOURCES.md`](./docs/DATA_SOURCES.md)
-- 💬 **Conversa:** [GitHub Discussions](https://github.com/merlinfachetti/civic-radar/discussions)
-- 🐛 **Bug ou parser quebrado:** [abra uma issue](https://github.com/merlinfachetti/civic-radar/issues/new/choose)
+- 🌱 **First contribution:** [issues labeled `good first issue`](https://github.com/merlinfachetti/civic-radar/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
+- 📚 **Full guide:** [`docs/CONTRIBUTING.md`](./docs/CONTRIBUTING.md)
+- ➕ **Add a new source:** [`docs/DATA_SOURCES.md`](./docs/DATA_SOURCES.md)
+- 💬 **Conversation:** [GitHub Discussions](https://github.com/merlinfachetti/civic-radar/discussions)
+- 🐛 **Bug or broken parser:** [open an issue](https://github.com/merlinfachetti/civic-radar/issues/new/choose)
 
 ### Code of Conduct
 
-Este projeto adota o [Contributor Covenant](./docs/CODE_OF_CONDUCT.md). Ao participar, você concorda em respeitar este código.
+This project adopts the [Contributor Covenant](./docs/CODE_OF_CONDUCT.md). By participating you agree to follow it.
 
 ---
 
 ## 🔒 Security
 
-Para reportar vulnerabilidades de forma responsável, veja [`docs/SECURITY.md`](./docs/SECURITY.md). **Não abra issues públicas para vulnerabilidades.**
+To responsibly report a vulnerability, see [`docs/SECURITY.md`](./docs/SECURITY.md). **Do not open public issues for vulnerabilities.**
 
 ---
 
 ## ⚖️ License & Disclaimer
 
-CivicRadar é distribuído sob a [**AGPL-3.0**](./LICENSE).
+CivicRadar is distributed under [**AGPL-3.0**](./LICENSE).
 
-> **CivicRadar não é uma fonte oficial.** É uma ferramenta de descoberta e organização. Sempre confirme informações de inscrição, prazos e requisitos diretamente nos canais oficiais (banca organizadora, órgão, diário oficial). Cada oportunidade no CivicRadar exibe link para a fonte original.
+> **CivicRadar is not an official source.** It is a discovery and organization tool. Always confirm registration details, deadlines and requirements directly with the official channels (organizing board, agency, official gazette). Every opportunity on CivicRadar surfaces a link to the original source.
 
 ---
 
 ## 🙏 Acknowledgements
 
-- Todas as pessoas, bancas, órgãos e portais públicos que mantêm informações de concursos acessíveis online
-- Contribuidores deste repositório (lista no [`CONTRIBUTORS.md`](./docs/CONTRIBUTORS.md), em breve)
-- [shadcn/ui](https://ui.shadcn.com/), [FastAPI](https://fastapi.tiangolo.com/), [Next.js](https://nextjs.org/), [Astral](https://astral.sh/) e demais projetos open source que tornam isso possível
+- Every person, board, agency and portal that keeps tender information publicly accessible online
+- Contributors to this repository (list at [`docs/CONTRIBUTORS.md`](./docs/CONTRIBUTORS.md), coming soon)
+- [shadcn/ui](https://ui.shadcn.com/), [FastAPI](https://fastapi.tiangolo.com/), [Next.js](https://nextjs.org/), [Astral](https://astral.sh/) and the rest of the open source projects that make this possible
 
 ---
 
 <div align="center">
 
-**Construído com ❤️ como ferramenta de civic-tech para o Brasil.**
+**Built with ❤️ as a civic-tech tool for Brazil.**
 
-[⭐ Star no GitHub](https://github.com/merlinfachetti/civic-radar) · [🐛 Reportar bug](https://github.com/merlinfachetti/civic-radar/issues/new/choose) · [💡 Sugerir feature](https://github.com/merlinfachetti/civic-radar/issues/new/choose)
+[⭐ Star on GitHub](https://github.com/merlinfachetti/civic-radar) · [🐛 Report bug](https://github.com/merlinfachetti/civic-radar/issues/new/choose) · [💡 Suggest a feature](https://github.com/merlinfachetti/civic-radar/issues/new/choose)
 
 </div>

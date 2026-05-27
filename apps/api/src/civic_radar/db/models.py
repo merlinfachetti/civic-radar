@@ -61,7 +61,7 @@ class EducationLevel(enum.StrEnum):
 
 
 class Source(Base):
-    """A data source (banca, órgão, portal, agregador)."""
+    """A data source (organizing board, agency, portal or aggregator)."""
 
     __tablename__ = "source"
 

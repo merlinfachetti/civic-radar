@@ -1,25 +1,25 @@
 # Architecture
 
-> Diagramas de fluxo e decisões arquiteturais do CivicRadar.
+> Data flow diagrams and architectural decisions for CivicRadar.
 
-Para princípios e visão técnica geral, veja [`TECH_FOUNDATION.md`](./TECH_FOUNDATION.md).
-Para ADRs específicos, veja [`adr/`](./adr/).
+For technical principles and an overall view, see [`TECH_FOUNDATION.md`](./TECH_FOUNDATION.md).
+For specific decisions, see [`adr/`](./adr/).
 
 ---
 
-## 🏛️ Visão Macro
+## 🏛️ Macro view
 
 ```mermaid
 flowchart TB
-    subgraph Public["🌐 Fontes Públicas"]
+    subgraph Public["🌐 Public Sources"]
         F1[Cebraspe]
         F2[FGV]
         F3[PCI Concursos]
-        F4[Outros futuros]
+        F4[Future sources]
     end
 
     subgraph Ingest["🔄 Ingestion"]
-        I1[Crawler Async]
+        I1[Async Crawler]
         I2[Raw Snapshot Store]
         I3[Parser]
         I4[Normalizer]
@@ -35,7 +35,7 @@ flowchart TB
         S2[Match Engine]
         S3[OpenAPI 3.1]
         S4[Scalar UI]
-        S5[CLI Typer]
+        S5[Typer CLI]
     end
 
     subgraph Client["🎨 Client"]
@@ -63,7 +63,7 @@ flowchart TB
 
 ---
 
-## 🔄 Fluxo de Ingestion
+## 🔄 Ingestion flow
 
 ```mermaid
 sequenceDiagram
@@ -88,15 +88,15 @@ sequenceDiagram
     CRW-->>CR: report (X new, Y updated, Z gone)
 ```
 
-**Pontos importantes:**
-- Crawler **nunca** atualiza o DB diretamente; vai através do Normalizer
-- Raw snapshots permitem **re-parse retroativo** se parser melhorar
-- `content_hash` evita reparsing desnecessário (skip if unchanged)
-- Upsert por `(source_id, source_url)` evita duplicatas
+**Key points:**
+- The crawler **never** writes to the DB directly; it always goes through the normalizer
+- Raw snapshots enable **retroactive re-parsing** if the parser improves
+- `content_hash` avoids unnecessary re-parsing (skip if unchanged)
+- Upsert by `(source_id, source_url)` prevents duplicates
 
 ---
 
-## 🌊 Fluxo de Request (API)
+## 🌊 Request flow (API)
 
 ```mermaid
 sequenceDiagram
@@ -124,7 +124,7 @@ sequenceDiagram
 
 ---
 
-## 🎯 Fluxo de Match
+## 🎯 Match flow
 
 ```mermaid
 sequenceDiagram
@@ -134,26 +134,26 @@ sequenceDiagram
     participant M as Match Engine
     participant DB as Database
 
-    U->>W: preenche MatchProfile form
-    W->>W: salva em localStorage
+    U->>W: fills the MatchProfile form
+    W->>W: persists to localStorage
     W->>API: POST /v1/match { profile }
     API->>DB: SELECT opportunities WHERE status='open'
     DB-->>API: candidates
-    API->>M: score(profile, candidate) para cada
+    API->>M: score(profile, candidate) for each
     M-->>API: list[MatchResult { score, reasons }]
     API-->>W: ordered by score desc
-    W-->>U: render cards com radial + reasons
+    W-->>U: render cards with radial + reasons
 ```
 
-**Características:**
-- **Stateless** — Profile não é persistido server-side
-- **Determinístico** — Mesmo input → mesma saída
-- **Explainable** — Cada score acompanha breakdown
-- **Limited** — Apenas considera `status='open'` (concursos abertos)
+**Characteristics:**
+- **Stateless** — Profile is not persisted server-side
+- **Deterministic** — Same input → same output
+- **Explainable** — Every score comes with a breakdown
+- **Limited** — Only considers `status='open'` (active openings)
 
 ---
 
-## 📊 Modelo de Dados
+## 📊 Data model
 
 ```mermaid
 erDiagram
@@ -222,7 +222,7 @@ erDiagram
 
 ---
 
-## 🧩 Plugin Architecture (Crawlers)
+## 🧩 Plugin architecture (crawlers)
 
 ```mermaid
 classDiagram
@@ -275,11 +275,11 @@ classDiagram
     PCIParser --> Normalizer
 ```
 
-Para detalhes de implementação, veja [`DATA_SOURCES.md`](./DATA_SOURCES.md).
+For implementation details, see [`DATA_SOURCES.md`](./DATA_SOURCES.md).
 
 ---
 
-## 🎨 Frontend Architecture
+## 🎨 Frontend architecture
 
 ```mermaid
 flowchart LR
@@ -328,22 +328,22 @@ flowchart LR
 
 ---
 
-## 🚦 Estados de uma Opportunity
+## 🚦 Opportunity states
 
 ```mermaid
 stateDiagram-v2
-    [*] --> Draft : crawler descobriu mas faltam campos
+    [*] --> Draft : crawler discovered but fields missing
     Draft --> Open : registration_start_date <= today <= registration_end_date
     Draft --> Closed : registration_end_date < today
     Open --> Closed : registration_end_date < today
-    Open --> Cancelled : detectado cancelamento na fonte
+    Open --> Cancelled : cancellation detected at source
     Closed --> [*]
     Cancelled --> [*]
 ```
 
 ---
 
-## 📦 Container Architecture (Docker Compose)
+## 📦 Container architecture (Docker Compose)
 
 ```mermaid
 flowchart LR
@@ -358,11 +358,11 @@ flowchart LR
     API --> VOL
 ```
 
-Em **produção**, esta arquitetura se expande com:
+In **production**, this architecture expands with:
 - Reverse proxy (Caddy / Nginx)
-- Postgres separado
-- Redis para cache
-- Crawler worker em container separado
+- Standalone Postgres
+- Redis for cache
+- Crawler worker in its own container
 
 ---
 

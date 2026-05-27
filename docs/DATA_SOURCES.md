@@ -1,12 +1,12 @@
 # Data Sources
 
-> Guia para entender, adicionar e manter fontes de dados no CivicRadar.
+> Guide for understanding, adding and maintaining data sources in CivicRadar.
 
 ---
 
-## 📡 Fontes Atualmente Suportadas
+## 📡 Currently supported sources
 
-| Source ID | Nome | Tipo | Qualidade | Status |
+| Source ID | Name | Type | Quality | Status |
 |---|---|---|---|---|
 | `cebraspe` | Cebraspe | Organizing Board | High | ✅ Active |
 | `fgv` | FGV CONHECIMENTO | Organizing Board | High | ✅ Active |
@@ -14,20 +14,20 @@
 
 ---
 
-## 🎯 Princípios para Fontes
+## 🎯 Source principles
 
-1. **Oficiais primeiro** — Bancas organizadoras e sites de órgãos têm prioridade. Agregadores são complementares.
-2. **Respeito a robots.txt** — Sempre. Se a fonte não permite, não crawleamos.
-3. **Rate limiting** — Mínimo 5-10 segundos entre requests por fonte.
-4. **Metadados, não cópias** — Armazenamos título, datas, link. Não republicamos conteúdo integral.
-5. **Link para original** — Toda oportunidade exibe URL para fonte oficial.
-6. **Rastreabilidade** — `parser_version`, `last_checked_at`, `confidence_level` sempre presentes.
+1. **Official first** — Organizing boards and agency sites take priority. Aggregators are complementary.
+2. **Respect robots.txt** — Always. If the source forbids us, we do not crawl.
+3. **Rate limiting** — Minimum 5–10 seconds between requests per source.
+4. **Metadata, not copies** — We store title, dates and links. We do not republish full content.
+5. **Link to the original** — Every opportunity surfaces its official source URL.
+6. **Traceability** — `parser_version`, `last_checked_at`, `confidence_level` are always present.
 
 ---
 
-## ➕ Como Adicionar uma Nova Fonte
+## ➕ How to add a new source
 
-### 1. Crie a estrutura
+### 1. Create the structure
 
 ```bash
 SOURCE_ID="vunesp"
@@ -38,7 +38,7 @@ touch tests/__init__.py tests/test_parser.py
 touch fixtures/README.md
 ```
 
-### 2. Defina o `config.yaml`
+### 2. Define `config.yaml`
 
 ```yaml
 id: vunesp
@@ -54,56 +54,60 @@ quality_level: high          # high | medium | low
 maintainer: "@username"
 ```
 
-### 3. Implemente o Crawler
+### 3. Implement the crawler
 
 ```python
 # crawlers/crawlers/sources/vunesp/crawler.py
-from crawlers.core.base import BaseCrawler, RawSnapshot
+from crawlers.core.base import BaseCrawler
+from crawlers.core.models import RawSnapshot
+
 
 class VunespCrawler(BaseCrawler):
     source_id = "vunesp"
 
     async def fetch_list(self) -> list[RawSnapshot]:
-        # Lógica para buscar página índice
+        # Logic to fetch the index page
         ...
 
     async def fetch_detail(self, snapshot: RawSnapshot) -> RawSnapshot:
-        # Buscar página de detalhe
+        # Fetch the detail page
         ...
 ```
 
-### 4. Implemente o Parser
+### 4. Implement the parser
 
 ```python
 # crawlers/crawlers/sources/vunesp/parser.py
-from crawlers.core.base import BaseParser, ParsedOpportunity
+from crawlers.core.base import BaseParser
+from crawlers.core.models import ParsedOpportunity, RawSnapshot
+
 
 class VunespParser(BaseParser):
     source_id = "vunesp"
     parser_version = "1.0.0"
 
     def parse(self, snapshot: RawSnapshot) -> list[ParsedOpportunity]:
-        # Use selectolax para HTML, pdfplumber para PDF
-        # Deve ser determinístico
+        # Use selectolax for HTML, pdfplumber for PDF.
+        # Must be deterministic.
         ...
 ```
 
 ### 5. Capture fixtures
 
 ```bash
-# Salve HTML/PDF reais que serão a base dos testes
+# Save real HTML/PDF pages that will back the tests
 curl -A "CivicRadar/1.0" https://www.vunesp.com.br/concursos/abertos > \
   crawlers/crawlers/sources/vunesp/fixtures/concursos_abertos.html
 ```
 
-**Importante:** fixtures devem ser **representativas e estáveis**. Pelo menos:
-- 1 fixture de lista (página índice com vários concursos)
-- 2 fixtures de detalhe (concurso aberto + concurso encerrado)
-- 1 fixture edge case (ex: salário com faixa, sem data definida, etc)
+**Important:** fixtures must be **representative and stable**. At minimum:
+- 1 list fixture (index with multiple openings)
+- 2 detail fixtures (open + closed tender)
+- 1 edge case fixture (e.g. salary range, no defined date, etc.)
 
-### 6. Adicione golden file
+### 6. Add the golden file
 
-Para cada fixture, gere o output esperado em JSON:
+For every fixture, generate the expected JSON output:
 
 ```bash
 # fixtures/concursos_abertos.expected.json
@@ -119,28 +123,30 @@ Para cada fixture, gere o output esperado em JSON:
 }
 ```
 
-### 7. Escreva os testes
+### 7. Write the tests
 
 ```python
 # crawlers/crawlers/sources/vunesp/tests/test_parser.py
 import json
 from pathlib import Path
-from crawlers.sources.vunesp.parser import VunespParser
+
+from crawlers.sources.vunesp.parser import Parser
 
 FIXTURES = Path(__file__).parent.parent / "fixtures"
+
 
 def test_parser_extracts_concursos_abertos():
     html = (FIXTURES / "concursos_abertos.html").read_text()
     expected = json.loads((FIXTURES / "concursos_abertos.expected.json").read_text())
 
-    parser = VunespParser()
+    parser = Parser()
     result = parser.parse(make_snapshot(html))
 
     assert len(result) == len(expected["opportunities"])
-    # ... asserts campo a campo
+    # ... per-field asserts
 ```
 
-### 8. Registre a fonte no DB seed
+### 8. Register the source in the seed
 
 ```python
 # data/seeds/sources.py
@@ -150,50 +156,50 @@ SOURCES = [
 ]
 ```
 
-### 9. Abra PR
+### 9. Open a PR
 
-PR com:
-- Código do crawler + parser
-- Pelo menos 3 fixtures HTML + golden files
+The PR should include:
+- Crawler + parser code
+- At least 3 HTML fixtures + golden files
 - Tests passing
-- Update em `docs/DATA_SOURCES.md` (esta tabela acima)
-- Update no seed
+- An update in `docs/DATA_SOURCES.md` (the table above)
+- An update in the seed
 
 ---
 
-## 🏷️ Source Quality Levels
+## 🏷️ Source quality levels
 
-| Level | Critério | Exemplos |
+| Level | Criteria | Examples |
 |---|---|---|
-| **High** | Banca organizadora oficial, site institucional do órgão, com estrutura HTML/PDF previsível | Cebraspe, FGV, FCC, sites de tribunais |
-| **Medium** | Portal público com informação verificável mas estrutura variável | Portais de prefeitura, agregadores conhecidos |
-| **Low** | Agregador sem rastreabilidade clara, dados não verificáveis facilmente | Sites sem CNPJ visível, conteúdo copiado |
+| **High** | Official organizing board or agency site with predictable HTML/PDF structure | Cebraspe, FGV, FCC, court sites |
+| **Medium** | Public portal with verifiable information but variable structure | City-hall portals, well-known aggregators |
+| **Low** | Aggregator without clear traceability, hard-to-verify data | Sites without visible CNPJ, copied content |
 
 ---
 
-## ⏱️ Rate Limiting
+## ⏱️ Rate limiting
 
-Cada source declara `rate_limit_seconds` no `config.yaml`. O crawler base respeita isso automaticamente.
+Every source declares `rate_limit_seconds` in `config.yaml`. The base crawler respects it automatically.
 
-**Defaults sensatos:**
-- Bancas grandes (Cebraspe, FGV): 10s
-- Sites de órgãos: 15s
-- PDFs grandes: 30s
-- Agregadores: 5s (apenas se robots.txt permite)
+**Sensible defaults:**
+- Large boards (Cebraspe, FGV): 10s
+- Agency sites: 15s
+- Large PDFs: 30s
+- Aggregators: 5s (only if robots.txt permits)
 
 ---
 
 ## 🤖 robots.txt
 
-Antes de crawlear, o `BaseCrawler` checa `/robots.txt` da source. Se o user-agent `CivicRadar` ou `*` for proibido para o path, o crawler **aborta silenciosamente** e loga warning.
+Before crawling, `BaseCrawler` checks `/robots.txt` for the source. If the `CivicRadar` user-agent (or `*`) is disallowed for the path, the crawler **silently aborts** and logs a warning.
 
-Nunca tente burlar robots.txt. Se uma fonte importante bloqueia, abra issue para discutirmos alternativas (contato direto, API oficial, etc).
+Never try to bypass robots.txt. If an important source is blocked, open an issue so we can discuss alternatives (direct contact, official API, etc.).
 
 ---
 
-## 🩺 Parser Health
+## 🩺 Parser health
 
-Cada parser reporta saúde em `/v1/sources/{id}/health`:
+Every parser reports health at `/v1/sources/{id}/health`:
 
 ```json
 {
@@ -207,35 +213,35 @@ Cada parser reporta saúde em `/v1/sources/{id}/health`:
 }
 ```
 
-Se `items_extracted_last_run` é < 50% da média 7d, marcamos `anomaly_detected: true` — sinal de que o parser pode ter quebrado com mudança de layout.
+When `items_extracted_last_run` falls below 50% of the 7-day average, we flag `anomaly_detected: true` — a signal that the parser may have broken with a layout change.
 
 ---
 
-## 🔄 Atualizando fixtures
+## 🔄 Updating fixtures
 
-Se a fonte mudou o layout:
+When the source changes its layout:
 
 1. Bump `parser_version` (SemVer minor)
-2. Capture nova fixture com sufixo de data: `concursos_abertos_2026_05.html`
-3. Mantenha fixture antiga para regression testing
-4. Atualize parser para lidar com ambos os layouts (durante transição)
-5. Após estabilizar, deprecate fixture antiga em release major
+2. Capture a new fixture with a date suffix: `concursos_abertos_2026_05.html`
+3. Keep the old fixture for regression testing
+4. Update the parser to support both layouts (during transition)
+5. After stabilization, deprecate the old fixture in a major release
 
 ---
 
-## ⚖️ Considerações Legais
+## ⚖️ Legal considerations
 
-- **Nunca** copie conteúdo integral de fontes privadas (PCI, agregadores comerciais) se houver Terms of Service vedando.
-- **Sempre** identifique-se via User-Agent: `CivicRadar/1.0 (+https://github.com/merlinfachetti/civic-radar)`
-- **Em dúvida?** Abra issue com label `legal-review` antes de mergear.
+- **Never** copy full content from private sources (PCI, commercial aggregators) when their Terms of Service forbid it.
+- **Always** identify yourself via User-Agent: `CivicRadar/1.0 (+https://github.com/merlinfachetti/civic-radar)`
+- **In doubt?** Open an issue with the `legal-review` label before merging.
 
-Maintainers podem rejeitar fontes que apresentem risco legal/ético elevado.
+Maintainers can reject sources that pose elevated legal or ethical risk.
 
 ---
 
-## 📝 Templates de Issue
+## 📝 Issue templates
 
-- **"Add new source: <name>"** — para sugerir nova fonte
-- **"Parser broken for <source>"** — quando parser para de extrair corretamente
+- **"Add new source: <name>"** — to suggest a new source
+- **"Parser broken for <source>"** — when a parser stops extracting correctly
 
-Use `.github/ISSUE_TEMPLATE/` ao abrir.
+Use `.github/ISSUE_TEMPLATE/` when opening one.

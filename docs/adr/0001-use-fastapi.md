@@ -1,4 +1,4 @@
-# ADR 0001 — Use FastAPI for backend
+# ADR 0001 — Use FastAPI for the backend
 
 **Status:** Accepted
 **Date:** 2026-05-27
@@ -6,47 +6,47 @@
 
 ## Context
 
-Precisamos escolher framework Python para backend que ofereça:
+We need a Python web framework that delivers:
 
-- API HTTP idiomática
-- Validação automática de input/output
-- Documentação OpenAPI nativa (sem manutenção manual)
-- Suporte async (crawlers fazem muito I/O)
-- Boa ergonomia para contribuidores
+- An idiomatic HTTP API
+- Automatic input/output validation
+- Native OpenAPI documentation (no manual upkeep)
+- Async support (crawlers do a lot of I/O)
+- A good developer experience for contributors
 
-## Options Considered
+## Options considered
 
 | Option | Pros | Cons |
 |---|---|---|
-| **FastAPI** | OpenAPI nativo, Pydantic v2, async-first, ecosystem grande, docs excelentes | Relativamente novo (~6 anos) |
-| Django + DRF | Ecossistema enorme, admin pronto, ORM maduro | Async ainda em transição, OpenAPI requer libs externas, mais boilerplate |
-| Flask + extensões | Flexível, conhecido | OpenAPI/validação requerem libs separadas, sync por padrão |
-| Starlette puro | Mínimo, async-native | Tudo manual, sem validação/docs automáticos |
-| Litestar | Moderno, performance | Comunidade menor |
+| **FastAPI** | Native OpenAPI, Pydantic v2, async-first, large ecosystem, excellent docs | Relatively young (~6 years) |
+| Django + DRF | Huge ecosystem, ready-made admin, mature ORM | Async still transitional, OpenAPI needs external libs, more boilerplate |
+| Flask + extensions | Flexible, well-known | OpenAPI/validation require extra libs, sync by default |
+| Pure Starlette | Minimal, async-native | Everything manual, no validation/docs out of the box |
+| Litestar | Modern, good performance | Smaller community than FastAPI |
 
 ## Decision
 
-**Usar FastAPI** como framework backend.
+**Use FastAPI** as the backend framework.
 
 ## Consequences
 
-### Positivas
+### Positive
 
-- OpenAPI 3.1 gerada automaticamente do código (zero drift)
-- Pydantic v2 forçando type safety em runtime
-- `async def` natural para crawlers + DB calls
+- OpenAPI 3.1 generated automatically from the code (zero drift)
+- Pydantic v2 enforces type safety at runtime
+- `async def` feels natural for crawlers + DB calls
 - Scalar UI / ReDoc / Swagger UI plug-and-play
-- Contributors familiares com FastAPI são abundantes
+- Plenty of contributors are already familiar with FastAPI
 
-### Negativas / Trade-offs
+### Negative / trade-offs
 
-- Sem admin nativo (decidiremos depois se vale construir)
-- Acoplamento com Starlette (não é problema na prática)
-- Performance pura levemente abaixo de frameworks puramente async pequenos — irrelevante para nossa escala
+- No native admin (we will decide later whether to build one)
+- Coupling to Starlette (not an issue in practice)
+- Slightly lower pure performance than tiny async-only frameworks — irrelevant at our scale
 
-### Action Items
+### Action items
 
-- Estrutura modular por router (`/v1/opportunities.py`, etc)
-- Pydantic schemas separados de models SQLAlchemy
-- Scalar UI em `/docs` (em vez do Swagger UI padrão)
-- Todos endpoints com `summary`, `description`, `responses` ricos
+- Modular structure per router (`/v1/opportunities.py`, etc.)
+- Pydantic schemas kept separate from SQLAlchemy models
+- Scalar UI at `/docs` (instead of the default Swagger UI)
+- Every endpoint has rich `summary`, `description`, `responses`

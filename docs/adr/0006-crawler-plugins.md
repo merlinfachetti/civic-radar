@@ -6,39 +6,41 @@
 
 ## Context
 
-CivicRadar precisa lidar com **muitas fontes heterogêneas** — bancas, prefeituras, portais, agregadores — cada uma com estrutura HTML/PDF própria. Princípio open source 6.5: "Contribution-friendly" — adicionar nova fonte deve ser PR auto-contido.
+CivicRadar needs to deal with **many heterogeneous sources** — boards, city halls, portals, aggregators — each with its own HTML/PDF structure. Open source principle 6.5 says: "Contribution-friendly" — adding a new source must be a self-contained PR.
 
-## Options Considered
+## Options considered
 
 | Option | Pros | Cons |
 |---|---|---|
-| **Plugin architecture (Protocol-based)** | Cada fonte é isolada, fácil contribuir, testável | Boilerplate mínimo por fonte |
-| Single monolithic crawler | Menos código | Acoplamento absurdo, intestável, PRs gigantes |
-| Config-driven (YAML rules) | Sem código por fonte | Rapidamente vira DSL ad-hoc, inflexível |
-| External plugin loader (entry_points) | Plugin em pacote separado | Overkill para MVP, complica setup |
+| **In-repo plugin architecture (Protocol-based)** | Each source is isolated, easy to contribute, testable | Minimal boilerplate per source |
+| Single monolithic crawler | Less code | Wild coupling, untestable, gigantic PRs |
+| Config-driven (YAML rules) | No code per source | Quickly turns into an ad-hoc DSL, inflexible |
+| External plugin loader (entry_points) | Plugin in a separate package | Overkill for the MVP, complicates setup |
 
 ## Decision
 
-**Plugin architecture in-repo, baseada em `Protocol`s do Python**, com cada fonte em `crawlers/sources/<source_id>/`.
+**In-repo plugin architecture, built on Python `Protocol`s**, with each source living in `crawlers/crawlers/sources/<id>/`.
 
-### Estrutura
+### Structure
 
 ```
 crawlers/
-├── core/
-│   ├── base.py           # BaseCrawler, BaseParser, Normalizer
-│   ├── protocols.py      # Protocols (interface contracts)
-│   ├── models.py         # RawSnapshot, ParsedOpportunity
-│   ├── registry.py       # Auto-discovery por convenção
-│   └── http_client.py    # httpx + rate limit + robots.txt
-└── sources/
-    └── <source_id>/
-        ├── __init__.py
-        ├── config.yaml   # metadados da fonte
-        ├── crawler.py    # SourceCrawler implementation
-        ├── parser.py     # SourceParser implementation
-        ├── fixtures/     # HTML/PDF reais
-        └── tests/        # tests determinísticos
+├── pyproject.toml
+└── crawlers/                          # the actual package
+    ├── core/
+    │   ├── base.py           # BaseCrawler, BaseParser, Normalizer
+    │   ├── protocols.py      # Protocols (interface contracts)
+    │   ├── models.py         # RawSnapshot, ParsedOpportunity
+    │   ├── registry.py       # auto-discovery by convention
+    │   └── http_client.py    # httpx + rate limit + robots.txt
+    └── sources/
+        └── <source_id>/
+            ├── __init__.py
+            ├── config.yaml   # source metadata
+            ├── crawler.py    # SourceCrawler implementation
+            ├── parser.py     # SourceParser implementation
+            ├── fixtures/     # real HTML/PDF
+            └── tests/        # deterministic tests
 ```
 
 ### Contracts
@@ -61,40 +63,40 @@ class SourceParser(Protocol):
 
 ### Auto-discovery
 
-`crawlers/core/registry.py` faz introspecção de `crawlers/sources/*/` e registra automaticamente cada fonte que tem `config.yaml` válido + `crawler.py` + `parser.py`.
+`crawlers/crawlers/core/registry.py` walks `crawlers/sources/*/` and automatically registers every source that has a valid `config.yaml` + `crawler.py` + `parser.py`.
 
-CLI usa o registry: `civic_radar crawl --source cebraspe` resolve via registry.
+The CLI uses the registry: `civic_radar crawl --source cebraspe` resolves through it.
 
 ## Consequences
 
-### Positivas
+### Positive
 
-- **PR para nova fonte é auto-contido** — toca apenas `crawlers/sources/<id>/` + atualiza `docs/DATA_SOURCES.md`
-- **Tests isolados** — cada fonte testa seu parser sem afetar outras
-- **Versionamento por parser** — `parser_version` em SemVer permite migrations futuras
-- **Sem framework custom** — usa Protocol nativo do Python, zero magia
+- **A PR for a new source is self-contained** — touches only `crawlers/sources/<id>/` plus `docs/DATA_SOURCES.md`
+- **Isolated tests** — each source tests its parser without affecting the others
+- **Per-parser versioning** — SemVer `parser_version` enables future migrations
+- **No custom framework** — uses native Python Protocols, zero magic
 
-### Negativas / Trade-offs
+### Negative / trade-offs
 
-- **Some duplication** — cada fonte tem boilerplate similar
-  - **Mitigação:** `BaseCrawler` abstrai rate-limit, robots.txt, snapshot store
-- **Sem isolation forte** — bug numa source pode crashar processo
-  - **Mitigação:** Crawler orchestrator captura exceptions per-source; falha em uma fonte não afeta outras
-- **Plugin discovery em runtime** — não compile-time
-  - **Mitigação:** OK; CLI valida via registry no startup
+- **Some duplication** — each source carries similar boilerplate
+  - **Mitigation:** `BaseCrawler` abstracts rate-limiting, robots.txt and the snapshot store
+- **No hard isolation** — a bug in one source can crash the process
+  - **Mitigation:** The crawler orchestrator catches exceptions per source; one failure does not affect the others
+- **Discovery at runtime** — not at compile-time
+  - **Mitigation:** OK; the CLI validates via the registry at startup
 
-### Action Items
+### Action items
 
-- Criar `BaseCrawler` que cuida de:
-  - HTTP client httpx pré-configurado
-  - Rate limiting per-source
-  - robots.txt check obrigatório
-  - Logging structlog com contexto
-  - Snapshot store
-- Criar `BaseParser` abstract com helpers para HTML (selectolax) e PDF (pdfplumber)
-- Registry com validation: source ID único, parser_version válido SemVer
-- `docs/DATA_SOURCES.md` documenta workflow
+- Build a `BaseCrawler` that handles:
+  - A pre-configured httpx client
+  - Per-source rate limiting
+  - Mandatory robots.txt check
+  - structlog logging with context
+  - The snapshot store
+- Build an abstract `BaseParser` with helpers for HTML (selectolax) and PDF (pdfplumber)
+- Registry with validation: unique source ID, valid SemVer `parser_version`
+- `docs/DATA_SOURCES.md` documents the workflow
 
 ## Re-evaluation
 
-Quando tivermos >20 fontes ou plugin externos forem desejados, considerar evoluir para `entry_points` do setuptools. Mas isso é problema para o futuro.
+Once we have >20 sources, or external plugins are desired, consider moving to setuptools `entry_points`. That is a problem for future-us.

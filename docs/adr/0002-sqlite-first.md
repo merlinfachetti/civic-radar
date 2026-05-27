@@ -6,46 +6,46 @@
 
 ## Context
 
-Projeto é open source e precisa ser **trivial de rodar localmente** (princípio 6.4 do PRODUCT_FOUNDATION). Contribuidores não devem precisar configurar Postgres, criar DBs, gerenciar credenciais só para rodar testes.
+CivicRadar is open source and needs to be **trivial to run locally** (principle 6.4 in PRODUCT_FOUNDATION). Contributors should not have to set up Postgres, create databases or manage credentials just to run the tests.
 
-Por outro lado, em produção precisamos de um DB robusto que suporte concorrência, full-text search avançado, e backups.
+In production we still want a robust DB that handles concurrency, advanced full-text search and backups.
 
-## Options Considered
+## Options considered
 
 | Option | Pros | Cons |
 |---|---|---|
-| **SQLite local + Postgres prod** | Setup trivial local, Postgres robusto em prod | Pequenas divergências de SQL entre engines |
-| Postgres em tudo (com Docker) | Consistência total | Docker obrigatório, lentidão em testes |
-| SQLite em tudo | Máxima simplicidade | Concorrência ruim em prod, FTS limitado |
-| MySQL/MariaDB | Familiar | Não traz vantagem clara sobre Postgres |
+| **SQLite locally + Postgres in prod** | Trivial local setup, robust Postgres in prod | Small SQL divergences between engines |
+| Postgres everywhere (Docker) | Total consistency | Docker required, slower tests |
+| SQLite everywhere | Maximum simplicity | Poor concurrency in prod, limited FTS |
+| MySQL/MariaDB | Familiar | No clear advantage over Postgres |
 
 ## Decision
 
-- **Dev local:** SQLite (`data/civic_radar.db`)
+- **Local dev:** SQLite (`data/civic_radar.db`)
 - **Tests:** SQLite in-memory (`:memory:`)
 - **Production:** PostgreSQL 16
 
-Conexão configurada via `DATABASE_URL` em env. Alembic migrations escritas em SQLAlchemy 2.0 syntax para serem dialect-agnostic onde possível.
+The connection is configured via `DATABASE_URL` in env. Alembic migrations are written using SQLAlchemy 2.0 syntax to stay dialect-agnostic where possible.
 
 ## Consequences
 
-### Positivas
+### Positive
 
-- `git clone && docker compose up` funciona em 30 segundos
-- Contribuidores não precisam configurar nada além de Docker (ou uv)
-- Tests rápidos com `:memory:`
-- Postgres apenas em produção, onde concorrência importa
+- `git clone && docker compose up` boots in ~30 seconds
+- Contributors only need Docker (or uv) — nothing else
+- Fast tests with `:memory:`
+- Postgres only in production, where concurrency matters
 
-### Negativas / Trade-offs
+### Negative / trade-offs
 
-- **Risco de drift:** SQL específico de um engine pode quebrar no outro
-  - **Mitigação:** Usar SQLAlchemy Core/ORM apenas. CI roda testes em ambos os engines (job opcional).
-- **FTS5 (SQLite) vs tsvector (Postgres):** Comportamentos diferentes
-  - **Mitigação:** Abstrair search via service layer. Em SQLite usa FTS5, em Postgres usa GIN+tsvector.
-- **Migrations testadas em ambos:** Adicionar job CI que aplica migrations em Postgres também
+- **Drift risk:** engine-specific SQL can break on the other side
+  - **Mitigation:** Use SQLAlchemy Core/ORM only. CI runs tests on both engines (optional job).
+- **FTS5 (SQLite) vs tsvector (Postgres):** different behavior
+  - **Mitigation:** Abstract search through a service layer. SQLite uses FTS5, Postgres uses GIN+tsvector.
+- **Migrations tested on both:** add a CI job that applies migrations to Postgres too
 
-### Action Items
+### Action items
 
-- `apps/api/src/civic_radar/db/__init__.py` detecta dialect e configura adequadamente
-- CI roda backend tests em SQLite (default) e em Postgres (matrix job opcional)
-- Documentar em README: "default = SQLite; export DATABASE_URL=postgresql://... para Postgres"
+- `apps/api/src/civic_radar/db/__init__.py` detects the dialect and configures accordingly
+- CI runs backend tests on SQLite (default) and Postgres (optional matrix job)
+- Document in the README: "default = SQLite; export DATABASE_URL=postgresql://... for Postgres"

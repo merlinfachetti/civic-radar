@@ -1,28 +1,28 @@
 # TECH_FOUNDATION.md
 
-> **Documento técnico complementar ao [`PRODUCT_FOUNDATION.md`](./PRODUCT_FOUNDATION.md).**
-> Este arquivo define **como** construímos o CivicRadar — arquitetura, contratos, decisões, padrões.
+> **Technical companion to [`PRODUCT_FOUNDATION.md`](./PRODUCT_FOUNDATION.md).**
+> This file defines **how** we build CivicRadar — architecture, contracts, decisions, patterns.
 
 ---
 
-## 1. Princípios Técnicos
+## 1. Technical principles
 
-1. **Simplicidade primeiro** — SQLite no MVP, Postgres apenas em produção. Zero dependência externa para rodar local.
-2. **Plugin architecture para fontes** — Adicionar nova fonte deve ser um PR isolado em `crawlers/sources/<nome>/`, sem mexer no core.
-3. **Tests determinísticos** — Nenhum teste faz HTTP real. Fixtures HTML/PDF capturadas e versionadas.
-4. **Type safety total** — `mypy --strict` no Python, `tsc --strict` no TypeScript. Zero `any`.
-5. **Logs estruturados** — `structlog` no backend, sempre JSON em produção, sempre com correlation ID.
-6. **OpenAPI-first** — O schema é o contrato. Frontend tipa-se a partir do OpenAPI gerado.
-7. **Acessibilidade obrigatória** — WCAG 2.1 AA mínimo. axe-core no CI do frontend.
-8. **Responsividade mobile-first** — Layouts pensam mobile primeiro, expandem para tablet/desktop.
-9. **Observabilidade opt-in** — Prometheus metrics, structlog JSON. Nada envia telemetria por padrão.
-10. **Open data mindset** — Storage de metadados + links, nunca cópia integral de conteúdo de terceiros.
+1. **Simplicity first** — SQLite in the MVP, Postgres only in production. Zero external dependency to run locally.
+2. **Plugin architecture for sources** — Adding a new source must be an isolated PR under `crawlers/crawlers/sources/<name>/`, without touching the core.
+3. **Deterministic tests** — No test performs real HTTP. HTML/PDF fixtures are captured and versioned.
+4. **Total type safety** — `mypy --strict` in Python, `tsc --strict` in TypeScript. No `any`.
+5. **Structured logs** — `structlog` on the backend, always JSON in production, always with a correlation ID.
+6. **OpenAPI-first** — The schema is the contract. The frontend types itself from the generated OpenAPI.
+7. **Accessibility is mandatory** — WCAG 2.1 AA baseline. axe-core in the frontend CI.
+8. **Mobile-first responsiveness** — Layouts target mobile first, then expand to tablet/desktop.
+9. **Opt-in observability** — Prometheus metrics, structured logs. Nothing sends telemetry by default.
+10. **Open data mindset** — Store metadata and links, never copy full third-party content.
 
 ---
 
-## 2. Arquitetura Detalhada
+## 2. Detailed architecture
 
-### 2.1 Visão alta
+### 2.1 High-level view
 
 ```mermaid
 flowchart TB
@@ -87,34 +87,35 @@ flowchart TB
 
 | Layer | Responsibility | Tech | Tests |
 |---|---|---|---|
-| **Crawl** | Buscar conteúdo HTML/PDF, persistir snapshot bruto | httpx (async), Playwright (raro) | Mocked HTTP via respx |
-| **Parse** | Extrair dados estruturados do raw content | selectolax, pdfplumber | Fixtures versionadas + golden files |
-| **Normalize** | Mapear para schema canônico | Pydantic v2 | Unit tests por campo |
-| **Persist** | Storage SQLAlchemy 2.0 async | SQLite/Postgres + Alembic | In-memory SQLite |
+| **Crawl** | Fetch HTML/PDF content, persist raw snapshot | httpx (async), Playwright (rarely) | HTTP mocked via respx |
+| **Parse** | Extract structured data from raw content | selectolax, pdfplumber | Versioned fixtures + golden files |
+| **Normalize** | Map to the canonical schema | Pydantic v2 | Per-field unit tests |
+| **Persist** | SQLAlchemy 2.0 async storage | SQLite/Postgres + Alembic | In-memory SQLite |
 | **API** | HTTP, validation, OpenAPI | FastAPI + Pydantic | TestClient |
-| **Match** | Scoring determinístico | Pure Python | Property-based + unit |
-| **Web** | UI responsiva | Next.js 15 | Vitest + RTL |
+| **Match** | Deterministic scoring | Pure Python | Property-based + unit |
+| **Web** | Responsive UI | Next.js 15 | Vitest + RTL |
 
 ---
 
-## 3. Contratos de Parser
+## 3. Parser contracts
 
-Toda fonte implementa duas Protocols:
+Every source implements two Protocols:
 
 ```python
-# crawlers/core/protocols.py
+# crawlers/crawlers/core/protocols.py
 from typing import Protocol
-from .models import RawSnapshot, ParsedOpportunity
+
+from crawlers.core.models import ParsedOpportunity, RawSnapshot
 
 
 class SourceCrawler(Protocol):
     source_id: str
 
     async def fetch_list(self) -> list[RawSnapshot]:
-        """Buscar página índice e retornar snapshots com URLs de detalhe."""
+        """Fetch the index page and return snapshots with detail URLs."""
 
     async def fetch_detail(self, snapshot: RawSnapshot) -> RawSnapshot:
-        """Buscar página de detalhe e enriquecer snapshot."""
+        """Fetch a detail page and enrich the snapshot."""
 
 
 class SourceParser(Protocol):
@@ -122,22 +123,22 @@ class SourceParser(Protocol):
     parser_version: str
 
     def parse(self, snapshot: RawSnapshot) -> list[ParsedOpportunity]:
-        """Converter raw content em ParsedOpportunity. Deve ser determinístico."""
+        """Convert raw content into ParsedOpportunity. Must be deterministic."""
 ```
 
-### Convenções
+### Conventions
 
 - **`source_id`** — kebab-case (`cebraspe`, `fgv`, `pci-concursos`)
-- **`parser_version`** — semver (`"1.0.0"`); bump quando schema de output muda
-- **Idempotência** — Mesmo input → mesmo output sempre
-- **Sem efeitos colaterais no parser** — Apenas converte; persistência é responsabilidade do orchestrator
-- **Confidence per-field** — Parser pode marcar campos com `confidence: low|medium|high`
+- **`parser_version`** — semver (`"1.0.0"`); bump when the output schema changes
+- **Idempotency** — Same input → same output, always
+- **No side effects in the parser** — It only converts; persistence belongs to the orchestrator
+- **Per-field confidence** — The parser may mark fields with `confidence: low|medium|high`
 
 ---
 
-## 4. Schema do Banco
+## 4. Database schema
 
-### 4.1 Diagrama ER
+### 4.1 ER diagram
 
 ```mermaid
 erDiagram
@@ -177,7 +178,7 @@ erDiagram
         int vacancies
         string state
         string city
-        string status "draft|open|closed|cancelled"
+        string status
         date registration_start_date
         date registration_end_date
         date exam_date
@@ -209,16 +210,16 @@ erDiagram
     }
 ```
 
-### 4.2 Indexes recomendados
+### 4.2 Recommended indexes
 
 ```sql
--- Performance crítica para filtros mais comuns
+-- Performance critical for the most common filters
 CREATE INDEX idx_opportunity_status_state ON opportunity(status, state);
 CREATE INDEX idx_opportunity_area ON opportunity(area);
 CREATE INDEX idx_opportunity_registration_end ON opportunity(registration_end_date);
 CREATE INDEX idx_opportunity_source ON opportunity(source_id);
 
--- Search por keyword (SQLite FTS5 / Postgres pg_trgm)
+-- Keyword search (SQLite FTS5 / Postgres pg_trgm)
 CREATE VIRTUAL TABLE opportunity_fts USING fts5(
     title, description, position_name, organization,
     content=opportunity, content_rowid=rowid
@@ -227,23 +228,23 @@ CREATE VIRTUAL TABLE opportunity_fts USING fts5(
 
 ---
 
-## 5. API Design
+## 5. API design
 
-### 5.1 Versionamento
+### 5.1 Versioning
 
-- Versão major no path: `/v1/`, `/v2/`
-- Breaking changes apenas em nova major version
-- Suporte mínimo de 6 meses para version anterior após release de major nova
+- Major version in the path: `/v1/`, `/v2/`
+- Breaking changes only in a new major version
+- Minimum 6 months of support for the previous major after a new one ships
 
 ### 5.2 Conventions
 
-- **Listing** retorna sempre `{"items": [...], "pagination": {...}}`
-- **Pagination** via cursor (`?cursor=<opaque>&limit=20`)
-- **Filtering** via query params planos (`?state=SP&area=tecnologia`)
-- **Search** via `?q=` (FTS no DB)
-- **Sorting** via `?sort=field` ou `?sort=-field` (descending)
-- **Errors** seguem RFC 7807 (Problem Details for HTTP APIs)
-- **Cache** — `Cache-Control: public, max-age=300` em listings, `ETag` em details
+- **Listings** always return `{"items": [...], "pagination": {...}}`
+- **Pagination** is cursor-based (`?cursor=<opaque>&limit=20`)
+- **Filtering** uses flat query params (`?state=SP&area=tecnologia`)
+- **Search** uses `?q=` (FTS in the DB)
+- **Sorting** uses `?sort=field` or `?sort=-field` (descending)
+- **Errors** follow RFC 7807 (Problem Details for HTTP APIs)
+- **Cache** — `Cache-Control: public, max-age=300` on listings, `ETag` on details
 
 ### 5.3 OpenAPI enrichment
 
@@ -253,31 +254,32 @@ app = FastAPI(
     version="0.1.0",
     description=DESCRIPTION_MARKDOWN,
     openapi_tags=TAGS,
-    docs_url=None,  # substituído por Scalar
+    docs_url=None,  # replaced by Scalar
     redoc_url="/redoc",
 )
+
 
 @app.get("/docs", include_in_schema=False)
 async def scalar_docs():
     return get_scalar_api_reference(openapi_url=app.openapi_url, title=app.title)
 ```
 
-Cada endpoint define:
-- `summary` curto (1 linha)
-- `description` markdown rico
-- `response_model` Pydantic
-- `responses` para 4xx/5xx com exemplos
-- `tags` agrupando logicamente
+Every endpoint defines:
+- A short `summary` (one line)
+- A rich markdown `description`
+- A Pydantic `response_model`
+- `responses` for 4xx/5xx with examples
+- `tags` for logical grouping
 
 ---
 
-## 6. Match Engine
+## 6. Match engine
 
-### 6.1 Algoritmo (determinístico)
+### 6.1 Algorithm (deterministic)
 
-Pesos do PRODUCT_FOUNDATION §15:
+Weights from PRODUCT_FOUNDATION §15:
 
-| Critério | Peso |
+| Criterion | Weight |
 |---|---:|
 | Area match | 30 |
 | Keyword match | 20 |
@@ -294,6 +296,7 @@ class MatchResult:
     score: int  # 0-100
     reasons: list[MatchReason]
 
+
 @dataclass(frozen=True)
 class MatchReason:
     criterion: str  # "area" | "keyword" | "location" | ...
@@ -303,13 +306,13 @@ class MatchReason:
 
 ### 6.2 Explainability
 
-Toda resposta de match inclui razões em linguagem natural (PT-BR/EN), permitindo o usuário entender por que aquela oportunidade aparece naquela posição.
+Every match response includes natural-language reasons (PT-BR/EN), so users understand why an opportunity ranks where it does.
 
 ---
 
-## 7. Estratégia de Testes
+## 7. Testing strategy
 
-### 7.1 Pirâmide
+### 7.1 Pyramid
 
 ```
         ▲
@@ -324,23 +327,23 @@ Toda resposta de match inclui razões em linguagem natural (PT-BR/EN), permitind
 
 ### 7.2 Coverage gates
 
-| Camada | MVP | Estável |
+| Layer | MVP | Stable |
 |---|---:|---:|
 | Backend (`apps/api/`) | 70% | 80% |
-| Crawlers (`crawlers/`) | 80% (parsers críticos) | 90% |
+| Crawlers (`crawlers/`) | 80% (critical parsers) | 90% |
 | Frontend (`apps/web/`) | 50% | 70% |
-| Match engine | 95% (lógica determinística) | 95%+ |
+| Match engine | 95% (deterministic logic) | 95%+ |
 
 ### 7.3 Fixtures
 
-- HTML/PDF reais capturados manualmente, armazenados em `crawlers/sources/<source>/fixtures/`
-- Nome descritivo: `concurso_aberto_2024.html`, `edital_completo.pdf`
-- Acompanhado de `expected.json` (golden file) com output esperado
-- README por source explicando como atualizar fixtures
+- Real HTML/PDF pages captured manually, stored under `crawlers/crawlers/sources/<source>/fixtures/`
+- Descriptive names: `concurso_aberto_2024.html`, `edital_completo.pdf`
+- Accompanied by `expected.json` (golden file) with the expected output
+- A README per source explaining how to refresh fixtures
 
 ---
 
-## 8. Logging & Observabilidade
+## 8. Logging & observability
 
 ### 8.1 structlog
 
@@ -349,20 +352,20 @@ import structlog
 
 log = structlog.get_logger()
 
-# Sempre com context
+# Always with context
 log = log.bind(request_id=req_id, source_id="cebraspe")
 log.info("crawl.started", url=url)
 log.info("crawl.finished", duration_ms=123, items=15)
 ```
 
-Em produção: JSON via stdout, agregação externa (Loki / Datadog).
-Em dev: pretty-printed via Rich.
+In production: JSON to stdout, external aggregation (Loki / Datadog).
+In dev: pretty-printed via Rich.
 
-### 8.2 Métricas
+### 8.2 Metrics
 
-`/metrics` (Prometheus format) opt-in via `CIVIC_RADAR_METRICS_ENABLED=true`.
+`/metrics` (Prometheus format) is opt-in via `CIVIC_RADAR_METRICS_ENABLED=true`.
 
-Métricas básicas:
+Baseline metrics:
 - `civic_radar_http_requests_total{method, path, status}`
 - `civic_radar_http_request_duration_seconds{method, path}` (histogram)
 - `civic_radar_crawl_runs_total{source, status}`
@@ -371,54 +374,54 @@ Métricas básicas:
 
 ---
 
-## 9. Deploy (futuro)
+## 9. Deploy (future)
 
-> O MVP é local-first. Estas opções são planejadas mas não implementadas inicialmente.
+> The MVP is local-first. The options below are planned but not implemented yet.
 
-| Componente | Opções recomendadas |
+| Component | Recommended options |
 |---|---|
 | **API** | [Fly.io](https://fly.io/), [Railway](https://railway.app/), [Render](https://render.com/) |
-| **DB** | [Neon](https://neon.tech/) (Postgres serverless), Fly Postgres |
-| **Web** | [Vercel](https://vercel.com/) (Next.js nativo), Cloudflare Pages |
+| **DB** | [Neon](https://neon.tech/) (serverless Postgres), Fly Postgres |
+| **Web** | [Vercel](https://vercel.com/) (native Next.js), Cloudflare Pages |
 | **Crawler jobs** | GitHub Actions schedule (free), Fly.io machines |
 | **Object storage (snapshots)** | Cloudflare R2, Backblaze B2 |
 
-Todos suportam free tier suficiente para fase open source.
+All of them have a free tier large enough for the open source phase.
 
 ---
 
-## 10. Security Baseline
+## 10. Security baseline
 
-- **HTTPS only** em produção (via PaaS)
-- **CORS estrito** — apenas frontends permitidos
-- **Rate limiting** via slowapi (60 req/min anônimo)
-- **Headers de segurança**: HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy
-- **Dependabot** ativo (semanal)
-- **CodeQL scanning** ativo (semanal)
-- **Secrets nunca em código** — `.env` + pydantic-settings, GitHub Secrets em CI
-- **No PII storage** — perfis de match são request-scoped, não persistem
+- **HTTPS only** in production (via PaaS)
+- **Strict CORS** — only allowed frontends
+- **Rate limiting** via slowapi (60 req/min anonymous)
+- **Security headers**: HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy
+- **Dependabot** active (weekly)
+- **CodeQL scanning** active (weekly)
+- **No secrets in code** — `.env` + pydantic-settings, GitHub Secrets in CI
+- **No PII storage** — match profiles are request-scoped, never persisted
 
 ---
 
-## 11. Versionamento & Releases
+## 11. Versioning & releases
 
-- **SemVer** estrito (MAJOR.MINOR.PATCH)
+- **SemVer** strict (MAJOR.MINOR.PATCH)
 - **Conventional Commits** (`feat:`, `fix:`, `docs:`, `chore:`, `refactor:`, `test:`, `ci:`, `perf:`)
-- **CHANGELOG.md** auto-gerado via `git-cliff` (post-MVP)
-- **GitHub Releases** com release notes humanizadas
-- **Pre-MVP**: versão `0.x.y`, qualquer commit pode quebrar API
-- **Post-MVP**: versão `1.0.0`, breaking changes apenas em majors
+- **CHANGELOG.md** auto-generated via `git-cliff` (post-MVP)
+- **GitHub Releases** with human-readable release notes
+- **Pre-MVP**: version `0.x.y`, any commit may break the API
+- **Post-MVP**: version `1.0.0`, breaking changes only in majors
 
 ---
 
 ## 12. ADRs (Architecture Decision Records)
 
-Decisões arquiteturais significativas viram ADRs em [`docs/adr/`](./adr/):
+Significant architectural decisions live in [`docs/adr/`](./adr/):
 
 - [0001 — Use FastAPI](./adr/0001-use-fastapi.md)
 - [0002 — SQLite-first, Postgres-prod](./adr/0002-sqlite-first.md)
 - [0003 — AGPL-3.0 license](./adr/0003-agpl-license.md)
-- [0004 — shadcn/ui for frontend](./adr/0004-shadcn-ui.md)
+- [0004 — shadcn/ui for the frontend](./adr/0004-shadcn-ui.md)
 - [0005 — uv + ruff for Python tooling](./adr/0005-uv-ruff.md)
 - [0006 — Plugin architecture for crawlers](./adr/0006-crawler-plugins.md)
 
@@ -426,8 +429,8 @@ Decisões arquiteturais significativas viram ADRs em [`docs/adr/`](./adr/):
 
 ## 13. Links
 
-- [PRODUCT_FOUNDATION.md](./PRODUCT_FOUNDATION.md) — Visão de produto, escopo, princípios
-- [ARCHITECTURE.md](./ARCHITECTURE.md) — Diagramas de fluxo de dados
-- [DATA_SOURCES.md](./DATA_SOURCES.md) — Como adicionar fonte nova
-- [API.md](./API.md) — Referência rápida da API
-- [CONTRIBUTING.md](./CONTRIBUTING.md) — Setup, padrões, workflow
+- [PRODUCT_FOUNDATION.md](./PRODUCT_FOUNDATION.md) — Product vision, scope, principles
+- [ARCHITECTURE.md](./ARCHITECTURE.md) — Data flow diagrams
+- [DATA_SOURCES.md](./DATA_SOURCES.md) — How to add a new source
+- [API.md](./API.md) — Quick API reference
+- [CONTRIBUTING.md](./CONTRIBUTING.md) — Setup, standards, workflow

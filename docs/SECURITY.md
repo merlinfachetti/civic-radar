@@ -1,8 +1,8 @@
 # Security Policy
 
-## 🛡️ Versões suportadas
+## 🛡️ Supported versions
 
-Como o CivicRadar está em fase MVP/pre-1.0, apenas a versão mais recente da `main` recebe atualizações de segurança.
+While CivicRadar is in MVP/pre-1.0, only the latest `main` receives security updates.
 
 | Version | Supported |
 |---|:---:|
@@ -11,89 +11,89 @@ Como o CivicRadar está em fase MVP/pre-1.0, apenas a versão mais recente da `m
 
 ---
 
-## 🚨 Reportando uma vulnerabilidade
+## 🚨 Reporting a vulnerability
 
-**Não abra issues públicas para vulnerabilidades de segurança.**
+**Do not open public issues for security vulnerabilities.**
 
-Use um dos canais privados abaixo, em ordem de preferência:
+Use one of the private channels below, in order of preference:
 
-### 1. GitHub Security Advisory (preferido)
+### 1. GitHub Security Advisory (preferred)
 
-Use o link [**Report a vulnerability**](https://github.com/merlinfachetti/civic-radar/security/advisories/new) na aba Security do repositório. Isso cria um advisory privado que apenas maintainers podem ver.
+Use the [**Report a vulnerability**](https://github.com/merlinfachetti/civic-radar/security/advisories/new) link in the repository's Security tab. This creates a private advisory only maintainers can see.
 
-### 2. Email direto
+### 2. Direct email
 
-Envie para **security@civic-radar.dev** (placeholder; canal real será adicionado em breve). Use PGP se desejar (chave pública será publicada).
+Send to **security@civic-radar.dev** (placeholder; the real channel will be published soon). Use PGP if you prefer (public key will be published).
 
-### 3. Em último caso
+### 3. Last resort
 
-Se nenhuma das opções acima funcionar, abra um issue **mínimo e vago** ("encontrei uma vulnerabilidade, como reporto?") e um maintainer responderá com canal seguro.
-
----
-
-## 📋 O que incluir no report
-
-Para ajudar a investigar rapidamente, inclua:
-
-- **Descrição clara** da vulnerabilidade
-- **Steps to reproduce** (idealmente um PoC mínimo)
-- **Impacto** (o que um atacante poderia fazer?)
-- **Versão afetada** (commit SHA preferencialmente)
-- **Ambiente** (versão Python/Node, OS, configs relevantes)
-- **Sugestão de mitigação**, se tiver
+If none of the above work, open a **minimal and vague** issue ("found a vulnerability, how do I report?") and a maintainer will reach out via a secure channel.
 
 ---
 
-## ⏱️ Nosso compromisso
+## 📋 What to include in the report
 
-- **Acknowledgement** em até **72 horas**
-- **Avaliação inicial** em até **7 dias**
-- **Plano de fix** em até **14 dias** para vulnerabilidades confirmadas
-- **Disclosure pública coordenada** após patch released
+To help us investigate quickly, please include:
 
----
-
-## 🏆 Responsible Disclosure
-
-Agradecemos pesquisadores que reportam responsavelmente. Pretendemos:
-
-- Manter você informado durante o processo
-- Creditar você no advisory (a menos que prefira anonimato)
-- Listar em `SECURITY_HALL_OF_FAME.md` (em breve)
+- **Clear description** of the vulnerability
+- **Steps to reproduce** (ideally a minimal PoC)
+- **Impact** (what could an attacker do?)
+- **Affected version** (commit SHA preferred)
+- **Environment** (Python/Node versions, OS, relevant configs)
+- **Suggested mitigation**, if any
 
 ---
 
-## 🔒 Práticas de segurança do projeto
+## ⏱️ Our commitment
 
-- **Dependabot** ativo — semanal scan de dependências vulneráveis
-- **CodeQL** — análise estática automática
-- **Secrets scanning** — GitHub Advanced Security + gitleaks no pre-commit
-- **No PII storage** — perfis de match são request-scoped, não persistem
-- **HTTPS only** em produção
-- **Rate limiting** na API
-- **Headers de segurança** (HSTS, CSP, X-Frame-Options, etc)
+- **Acknowledgement** within **72 hours**
+- **Initial assessment** within **7 days**
+- **Fix plan** within **14 days** for confirmed vulnerabilities
+- **Coordinated public disclosure** after the patch is released
 
 ---
 
-## 🚫 Fora do escopo
+## 🏆 Responsible disclosure
 
-Estes **não** são considerados vulnerabilidades para fins deste programa:
+We are grateful to researchers who report responsibly. We commit to:
 
-- Issues que requerem MITM em rede insegura controlada pelo atacante
-- Self-XSS sem amplificação
-- Falta de rate limiting em endpoints não críticos (mas avise mesmo assim)
-- Versões antigas/forks não oficiais
-- Vulnerabilidades em dependências já reportadas pelo Dependabot
+- Keep you informed throughout the process
+- Credit you in the advisory (unless you prefer to remain anonymous)
+- List you in `SECURITY_HALL_OF_FAME.md` (coming soon)
 
 ---
 
-## 🤝 Coordinated Disclosure
+## 🔒 Project security practices
 
-Para vulnerabilidades em dependências críticas, vamos coordenar disclosure com:
-- Maintainers da dependência afetada
-- Pesquisador
-- Eventualmente CERT.br ou similar se aplicável
+- **Dependabot** active — weekly scan of vulnerable dependencies
+- **CodeQL** — automatic static analysis
+- **Secret scanning** — GitHub Advanced Security + gitleaks in pre-commit
+- **No PII storage** — match profiles are request-scoped, not persisted
+- **HTTPS only** in production
+- **Rate limiting** on the API
+- **Security headers** (HSTS, CSP, X-Frame-Options, etc.)
 
 ---
 
-Obrigado por ajudar a manter o CivicRadar seguro para todos. 🛡️
+## 🚫 Out of scope
+
+These are **not** considered vulnerabilities for the purposes of this program:
+
+- Issues requiring MITM on an attacker-controlled insecure network
+- Self-XSS without amplification
+- Missing rate limits on non-critical endpoints (report anyway)
+- Old/unofficial forks
+- Vulnerabilities in dependencies already flagged by Dependabot
+
+---
+
+## 🤝 Coordinated disclosure
+
+For vulnerabilities in critical dependencies, we will coordinate disclosure with:
+- Maintainers of the affected dependency
+- The reporting researcher
+- CERT.br or similar bodies where applicable
+
+---
+
+Thanks for helping keep CivicRadar safe for everyone. 🛡️
