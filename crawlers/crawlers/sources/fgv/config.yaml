@@ -1,0 +1,11 @@
+id: fgv
+name: FGV CONHECIMENTO
+type: organizing_board
+base_url: https://conhecimento.fgv.br/concursos
+enabled: true
+robots_policy_required: true
+rate_limit_seconds: 10
+parser: fgv_v1
+parser_version: "1.0.0"
+quality_level: high
+maintainer: "@civic-radar-maintainers"

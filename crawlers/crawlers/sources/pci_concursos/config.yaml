@@ -1,0 +1,11 @@
+id: pci-concursos
+name: PCI Concursos
+type: aggregator
+base_url: https://www.pciconcursos.com.br/
+enabled: true
+robots_policy_required: true
+rate_limit_seconds: 15
+parser: pci_concursos_v1
+parser_version: "1.0.0"
+quality_level: medium
+maintainer: "@civic-radar-maintainers"

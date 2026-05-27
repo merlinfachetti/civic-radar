@@ -1,0 +1,11 @@
+id: cebraspe
+name: Cebraspe
+type: organizing_board
+base_url: https://www.cebraspe.org.br/concursos/
+enabled: true
+robots_policy_required: true
+rate_limit_seconds: 10
+parser: cebraspe_v1
+parser_version: "1.0.0"
+quality_level: high
+maintainer: "@civic-radar-maintainers"
