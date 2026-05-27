@@ -8,7 +8,7 @@ license = { text = "AGPL-3.0-or-later" }
 
 dependencies = [
     # Web framework
-    "fastapi[standard]>=0.115.0",
+    "fastapi[standard]>=0.136.3",
     "uvicorn[standard]>=0.32.0",
 
     # Validation & settings
