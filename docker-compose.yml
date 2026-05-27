@@ -1,0 +1,76 @@
+# CivicRadar — Docker Compose para desenvolvimento local
+#
+# Uso:
+#   docker compose up -d              # API + Web em background
+#   docker compose logs -f            # acompanhar logs
+#   docker compose down               # parar tudo
+#   docker compose down -v            # parar e limpar volumes (apaga DB)
+#
+# Endpoints:
+#   - API:        http://localhost:8000
+#   - API Docs:   http://localhost:8000/docs (Scalar)
+#   - Web:        http://localhost:3000
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: civic-radar-api
+    restart: unless-stopped
+    environment:
+      CIVIC_RADAR_ENV: "development"
+      CIVIC_RADAR_DATABASE_URL: "sqlite+aiosqlite:////data/civic_radar.db"
+      CIVIC_RADAR_LOG_LEVEL: "INFO"
+      CIVIC_RADAR_LOG_FORMAT: "console"
+      CIVIC_RADAR_CORS_ORIGINS: "http://localhost:3000"
+      CIVIC_RADAR_SEED_ON_STARTUP: "true"
+    ports:
+      - "8000:8000"
+    volumes:
+      - civic-radar-data:/data
+      - ./data/seeds:/seeds:ro
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=2)"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    container_name: civic-radar-web
+    restart: unless-stopped
+    environment:
+      NODE_ENV: "production"
+      NEXT_PUBLIC_API_URL: "http://localhost:8000"
+      INTERNAL_API_URL: "http://api:8000"
+    ports:
+      - "3000:3000"
+    depends_on:
+      api:
+        condition: service_healthy
+
+volumes:
+  civic-radar-data:
+    driver: local
+
+# Opcional: descomente para usar PostgreSQL em vez de SQLite localmente
+#  postgres:
+#    image: postgres:16-alpine
+#    container_name: civic-radar-postgres
+#    restart: unless-stopped
+#    environment:
+#      POSTGRES_USER: civicradar
+#      POSTGRES_PASSWORD: civicradar
+#      POSTGRES_DB: civicradar
+#    volumes:
+#      - civic-radar-postgres:/var/lib/postgresql/data
+#    ports:
+#      - "5432:5432"
+#
+# volumes:
+#   civic-radar-postgres:
+#     driver: local

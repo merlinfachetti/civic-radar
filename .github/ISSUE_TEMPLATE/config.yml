@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Discussions
+    url: https://github.com/merlinfachetti/civic-radar/discussions
+    about: Ideias, perguntas abertas e conversas — preferível a issues
+  - name: 🛡️ Security
+    url: https://github.com/merlinfachetti/civic-radar/security/advisories/new
+    about: Vulnerabilidades de segurança — use canal privado, não issue público
+  - name: 📚 Documentation
+    url: https://github.com/merlinfachetti/civic-radar/tree/main/docs
+    about: Antes de abrir issue, veja a documentação

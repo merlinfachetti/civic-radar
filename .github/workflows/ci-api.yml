@@ -1,0 +1,66 @@
+name: CI · API
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/api/**"
+      - "pyproject.toml"
+      - ".github/workflows/ci-api.yml"
+  pull_request:
+    paths:
+      - "apps/api/**"
+      - "pyproject.toml"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHON_VERSION: "3.12"
+  UV_NO_PROGRESS: "true"
+
+jobs:
+  lint-and-test:
+    name: lint + test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+          enable-cache: true
+
+      - name: Set up Python
+        run: uv python install ${{ env.PYTHON_VERSION }}
+
+      - name: Sync workspace
+        run: uv sync --extra dev
+
+      - name: Ruff format check
+        working-directory: apps/api
+        run: uv run ruff format --check .
+
+      - name: Ruff lint
+        working-directory: apps/api
+        run: uv run ruff check .
+
+      - name: Mypy
+        working-directory: apps/api
+        run: uv run mypy src/
+
+      - name: Pytest (with coverage gate >=70%)
+        working-directory: apps/api
+        run: uv run pytest
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-coverage
+          path: apps/api/htmlcov
+          retention-days: 7

@@ -1,0 +1,74 @@
+name: 💡 Feature Request
+description: Sugerir uma nova funcionalidade ou melhoria
+title: "[Feature]: "
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado por sugerir uma melhoria! ✨
+
+        Para entender melhor, descreva _why_ (motivação) e _what_ (proposta).
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivação / Problema
+      description: Que problema você está tentando resolver?
+      placeholder: Ex. Quando filtro por múltiplos estados, não consigo combinar com filtro de área.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposta
+      description: Como você imagina que seria resolvido?
+      placeholder: Ex. Permitir query params repetidos. `?state=SP&state=RJ&area=ti`
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternativas consideradas
+      description: Que outras abordagens você pensou? Por que essa parece melhor?
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Área
+      multiple: true
+      options:
+        - API (backend)
+        - Web (frontend)
+        - Crawlers
+        - CLI
+        - Documentation
+        - i18n
+        - Accessibility
+        - Performance
+        - Security
+        - Developer Experience
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Prioridade percebida
+      options:
+        - Low — quality of life
+        - Medium — útil para muitos usuários
+        - High — bloqueia caso de uso comum
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribuição
+      options:
+        - label: Estou disposto a abrir PR para isso
+        - label: Estou disposto a testar quando alguém implementar
+        - label: Quero apenas sugerir

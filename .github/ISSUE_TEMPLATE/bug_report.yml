@@ -1,0 +1,85 @@
+name: 🐛 Bug Report
+description: Reportar comportamento incorreto no CivicRadar
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado por reportar um bug! 🙏
+
+        **Atenção:** Para vulnerabilidades de segurança, **não** use issue público — siga [SECURITY.md](../blob/main/docs/SECURITY.md).
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Descrição
+      description: O que aconteceu? O que você esperava que acontecesse?
+      placeholder: Ex. Ao filtrar por estado SP, retornam oportunidades de outros estados também.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Passos mínimos para reproduzir o bug
+      placeholder: |
+        1. Acesse `/opportunities`
+        2. Selecione filtro "Estado: SP"
+        3. Observe resultados
+      render: markdown
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Área afetada
+      options:
+        - API (backend)
+        - Web (frontend)
+        - Crawler / Parser
+        - CLI
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: source
+    attributes:
+      label: Source afetada (se aplicável)
+      description: Cebraspe, FGV, PCI Concursos, etc
+      placeholder: cebraspe
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Ambiente
+      description: Versão, OS, Docker vs nativo
+      placeholder: |
+        - Commit SHA: abc1234
+        - OS: macOS 14.5
+        - Runtime: Docker compose
+        - Browser (se web): Chrome 130
+      render: markdown
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs ou screenshots
+      description: Cole logs relevantes ou anexe screenshot
+      render: shell
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checklist
+      options:
+        - label: Procurei issues existentes para evitar duplicata
+          required: true
+        - label: Li o [Code of Conduct](../blob/main/docs/CODE_OF_CONDUCT.md)
+          required: true

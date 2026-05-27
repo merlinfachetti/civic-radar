@@ -1,0 +1,94 @@
+name: 📡 Add New Source
+description: Sugerir/implementar uma nova fonte de dados (banca, portal, agregador)
+title: "[Source]: Add <nome da fonte>"
+labels: ["source", "good first issue", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado por sugerir uma nova fonte! 📡
+
+        Veja [`docs/DATA_SOURCES.md`](../blob/main/docs/DATA_SOURCES.md) para o guia completo.
+
+  - type: input
+    id: source_name
+    attributes:
+      label: Nome da fonte
+      description: Nome completo da banca/órgão/portal
+      placeholder: Ex. Vunesp
+    validations:
+      required: true
+
+  - type: input
+    id: source_id
+    attributes:
+      label: Source ID proposto
+      description: kebab-case, único
+      placeholder: vunesp
+    validations:
+      required: true
+
+  - type: input
+    id: source_url
+    attributes:
+      label: URL base
+      placeholder: https://www.vunesp.com.br/
+    validations:
+      required: true
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: Tipo
+      options:
+        - organizing_board (banca organizadora)
+        - agency (órgão público)
+        - portal (portal institucional)
+        - aggregator (agregador)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: quality
+    attributes:
+      label: Quality level estimado
+      options:
+        - high (oficial, estrutura previsível)
+        - medium (institucional, estrutura variável)
+        - low (agregador sem rastreabilidade clara)
+    validations:
+      required: true
+
+  - type: textarea
+    id: structure
+    attributes:
+      label: Estrutura da fonte
+      description: HTML simples? JS-heavy? PDFs? Tem RSS/JSON?
+      placeholder: |
+        - Lista em /concursos/abertos.html (HTML server-side)
+        - Detalhes em /concurso/<id>
+        - Editais em PDF separado
+    validations:
+      required: true
+
+  - type: textarea
+    id: robots
+    attributes:
+      label: robots.txt e termos
+      description: Conteúdo relevante de /robots.txt e ToS, se aplicável
+      render: text
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checklist
+      options:
+        - label: Verifiquei que a fonte ainda não existe em `crawlers/sources/`
+          required: true
+        - label: Li `docs/DATA_SOURCES.md` antes de abrir esta issue
+          required: true
+        - label: robots.txt permite crawling civilizado dos paths necessários
+          required: true
+        - label: Estou disposto a abrir PR com fixtures + parser

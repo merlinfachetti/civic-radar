@@ -1,0 +1,62 @@
+name: 🔧 Parser Broken
+description: Reportar que um parser parou de funcionar (provavelmente layout da fonte mudou)
+title: "[Parser]: <source_id> — descrição curta"
+labels: ["parser", "bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado por reportar! Layout de fontes muda com frequência. 🔧
+
+  - type: input
+    id: source_id
+    attributes:
+      label: Source ID
+      placeholder: cebraspe
+    validations:
+      required: true
+
+  - type: input
+    id: parser_version
+    attributes:
+      label: Parser version
+      description: Veja em `crawlers/sources/<id>/parser.py`
+      placeholder: "1.2.0"
+    validations:
+      required: true
+
+  - type: textarea
+    id: symptoms
+    attributes:
+      label: Sintomas observados
+      description: O que está extraindo errado, ou não extraindo?
+      placeholder: |
+        - Campo `salary_min` retornando `null` para todos os items desde 2026-05-25
+        - Anomaly detected: items extraídos caíram de ~50/dia para 0
+    validations:
+      required: true
+
+  - type: input
+    id: example_url
+    attributes:
+      label: URL exemplo
+      description: Página onde parser falha
+      placeholder: https://www.cebraspe.org.br/concursos/...
+
+  - type: textarea
+    id: fixture
+    attributes:
+      label: Nova fixture
+      description: Anexe HTML/PDF capturado (drag-and-drop)
+      placeholder: |
+        Para gerar fixture:
+        curl -A "CivicRadar/1.0" <url> > new_fixture.html
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checklist
+      options:
+        - label: Verifiquei que parser_version atual está atualizado
+          required: true
+        - label: Comparei com fixture antiga para ver o que mudou

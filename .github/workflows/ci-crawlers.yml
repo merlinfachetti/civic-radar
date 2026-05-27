@@ -1,0 +1,52 @@
+name: CI · Crawlers
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "crawlers/**"
+      - ".github/workflows/ci-crawlers.yml"
+  pull_request:
+    paths:
+      - "crawlers/**"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHON_VERSION: "3.12"
+  UV_NO_PROGRESS: "true"
+
+jobs:
+  lint-and-test:
+    name: parsers + fixtures
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+          enable-cache: true
+
+      - name: Set up Python
+        run: uv python install ${{ env.PYTHON_VERSION }}
+
+      - name: Sync workspace
+        run: uv sync --extra dev
+
+      - name: Ruff lint
+        working-directory: crawlers
+        run: uv run ruff check .
+
+      - name: Mypy
+        working-directory: crawlers
+        run: uv run mypy crawlers/
+
+      - name: Parser tests against fixtures
+        working-directory: crawlers
+        run: uv run pytest
