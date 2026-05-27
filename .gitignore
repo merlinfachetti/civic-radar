@@ -1,0 +1,118 @@
+# ───────────────────────────────────────────────────────────
+# CivicRadar — .gitignore
+# ───────────────────────────────────────────────────────────
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# uv
+.venv/
+venv/
+ENV/
+env/
+.python-version
+uv.lock.bak
+
+# Pytest / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+*.cover
+.hypothesis/
+.tox/
+.nox/
+
+# mypy / ruff
+.mypy_cache/
+.ruff_cache/
+.dmypy.json
+dmypy.json
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+.turbo/
+*.tsbuildinfo
+next-env.d.ts
+.pnpm-store/
+.pnpm-debug.log*
+.yarn/
+yarn-error.log
+npm-debug.log*
+
+# Bundlers
+.swc/
+.parcel-cache/
+
+# Vitest
+coverage/
+
+# Playwright
+playwright-report/
+playwright/.cache/
+test-results/
+
+# Logs
+logs/
+*.log
+
+# Environment
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# IDE / Editor
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.example.json
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# CivicRadar — runtime artifacts
+data/exports/*
+!data/exports/.gitkeep
+data/civic_radar.db
+data/civic_radar.db-journal
+data/civic_radar.db-wal
+data/civic_radar.db-shm
+data/raw_snapshots/
+
+# Docker
+.docker-volumes/
+
+# Misc
+*.pid
+*.seed
+*.pid.lock
+.cache/
+tmp/
+temp/
