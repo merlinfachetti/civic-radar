@@ -1,12 +1,12 @@
 name: 🔧 Parser Broken
-description: Reportar que um parser parou de funcionar (provavelmente layout da fonte mudou)
-title: "[Parser]: <source_id> — descrição curta"
+description: Report that a parser stopped working (likely a source layout change)
+title: "[Parser]: <source_id> — short description"
 labels: ["parser", "bug", "needs-triage"]
 body:
   - type: markdown
     attributes:
       value: |
-        Obrigado por reportar! Layout de fontes muda com frequência. 🔧
+        Thanks for the report! Source layouts change all the time. 🔧
 
   - type: input
     id: source_id
@@ -20,7 +20,7 @@ body:
     id: parser_version
     attributes:
       label: Parser version
-      description: Veja em `crawlers/sources/<id>/parser.py`
+      description: Check it in `crawlers/crawlers/sources/<id>/parser.py`
       placeholder: "1.2.0"
     validations:
       required: true
@@ -28,28 +28,28 @@ body:
   - type: textarea
     id: symptoms
     attributes:
-      label: Sintomas observados
-      description: O que está extraindo errado, ou não extraindo?
+      label: Observed symptoms
+      description: What is being extracted incorrectly, or not being extracted at all?
       placeholder: |
-        - Campo `salary_min` retornando `null` para todos os items desde 2026-05-25
-        - Anomaly detected: items extraídos caíram de ~50/dia para 0
+        - `salary_min` returning `null` for all items since 2026-05-25
+        - Anomaly detected: items extracted dropped from ~50/day to 0
     validations:
       required: true
 
   - type: input
     id: example_url
     attributes:
-      label: URL exemplo
-      description: Página onde parser falha
+      label: Example URL
+      description: Page where the parser is failing
       placeholder: https://www.cebraspe.org.br/concursos/...
 
   - type: textarea
     id: fixture
     attributes:
-      label: Nova fixture
-      description: Anexe HTML/PDF capturado (drag-and-drop)
+      label: New fixture
+      description: Attach the captured HTML/PDF (drag-and-drop)
       placeholder: |
-        Para gerar fixture:
+        To generate a fixture:
         curl -A "CivicRadar/1.0" <url> > new_fixture.html
 
   - type: checkboxes
@@ -57,6 +57,6 @@ body:
     attributes:
       label: Checklist
       options:
-        - label: Verifiquei que parser_version atual está atualizado
+        - label: I confirmed the current parser_version is up to date
           required: true
-        - label: Comparei com fixture antiga para ver o que mudou
+        - label: I compared with the old fixture to see what changed

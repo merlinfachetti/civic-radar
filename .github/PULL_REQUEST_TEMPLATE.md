@@ -1,47 +1,47 @@
 <!--
-Obrigado por contribuir com CivicRadar! 🛰️
+Thanks for contributing to CivicRadar! 🛰️
 
-Antes de abrir, certifique-se de:
-- Ter lido docs/CONTRIBUTING.md
-- Ter rodado testes localmente
-- Ter atualizado documentação se aplicável
+Before opening this PR, make sure you:
+- Read docs/CONTRIBUTING.md
+- Ran tests locally
+- Updated documentation when applicable
 -->
 
-## 📝 Descrição
+## 📝 Description
 
-<!-- O que esse PR muda? Por que? -->
+<!-- What does this PR change? Why? -->
 
-## 🔗 Issue relacionada
+## 🔗 Related issue
 
 <!-- Closes #123 / Relates to #123 -->
 
-## 🧪 Como testar
+## 🧪 How to test
 
-<!-- Passos para revisor confirmar que funciona -->
+<!-- Steps for the reviewer to confirm it works -->
 
 ```bash
-# Exemplo:
+# Example:
 cd apps/api
 uv run pytest tests/unit/test_match.py -v
 ```
 
 ## ✅ Checklist
 
-- [ ] Testes passando localmente (`uv run pytest` / `pnpm test`)
-- [ ] Lint passando (`uv run ruff check` / `pnpm lint`)
-- [ ] Type check passando (`uv run mypy` / `pnpm typecheck`)
-- [ ] Coverage não diminuiu significativamente
-- [ ] Atualizei docs relevantes (README, CONTRIBUTING, DATA_SOURCES, etc)
-- [ ] Para nova fonte: adicionei fixtures + golden files
-- [ ] Para nova feature: atualizei OpenAPI examples (se aplica à API)
-- [ ] Para mudanças visuais: testei em mobile/tablet/desktop
-- [ ] Para mudanças visuais: testei em dark/light mode
-- [ ] Commit messages seguem [Conventional Commits](https://www.conventionalcommits.org/)
+- [ ] Tests passing locally (`uv run pytest` / `pnpm test`)
+- [ ] Lint passing (`uv run ruff check` / `pnpm lint`)
+- [ ] Type check passing (`uv run mypy` / `pnpm typecheck`)
+- [ ] Coverage did not drop meaningfully
+- [ ] Updated relevant docs (README, CONTRIBUTING, DATA_SOURCES, etc.)
+- [ ] For a new source: added fixtures + golden files
+- [ ] For a new feature: updated OpenAPI examples (if it touches the API)
+- [ ] For visual changes: tested on mobile/tablet/desktop
+- [ ] For visual changes: tested on dark/light mode
+- [ ] Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/)
 
 ## 📸 Screenshots / videos
 
-<!-- Para mudanças visuais, anexe antes/depois -->
+<!-- For visual changes, attach before/after -->
 
-## 🤔 Considerações
+## 🤔 Considerations
 
-<!-- Decisões importantes, trade-offs, alternativas consideradas -->
+<!-- Important decisions, trade-offs, alternatives considered -->
