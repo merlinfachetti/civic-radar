@@ -14,7 +14,7 @@ dependencies = [
     "selectolax>=0.3.0",
 
     # PDF parsing
-    "pdfplumber>=0.11.0",
+    "pdfplumber>=0.11.9",
     "pypdf>=5.0.0",
 
     # Robots.txt
